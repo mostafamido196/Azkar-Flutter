@@ -34,9 +34,7 @@ class DrawerWidget extends StatelessWidget {
                 'عن التطبيق',
                 AppColors.white,
               ),
-            ],
-
-            //     ),
+            ]
           ),
         ));
   }
@@ -44,9 +42,7 @@ class DrawerWidget extends StatelessWidget {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.only(left: 14, bottom: 14, top: 14, right: 14),
-      decoration: BoxDecoration(
-        color: AppColors.c4Actionbar.withOpacity(0.7)
-      ),
+      decoration: BoxDecoration(color: AppColors.c4Actionbar.withOpacity(0.7)),
       child: Text(
         "ۛ ּڝــحۡــۑْۧــحۡ اﻷذڪــٰٱڕ",
         textAlign: TextAlign.center,
