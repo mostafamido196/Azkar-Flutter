@@ -3,94 +3,95 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DrawerWidget extends StatelessWidget {
-  final bool isOpen;
-
   const DrawerWidget({
-    required this.isOpen,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-        textDirection: TextDirection.rtl,
-        child: AnimatedPositioned(
-          duration: const Duration(milliseconds: 300),
-          left: isOpen ? 0 : -250,
-          top: 0,
-          bottom: 0,
-          width: 250,
-          child: Container(
-            color: AppColors.c1Drawer,
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                const DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: AppColors.c4Actionbar,
-                  ),
-                  child: Text(
-                    "ۛ ּڝــحۡــۑْۧــحۡ ا̍ﻷ̍ذڪــٰٱ̍ڕ",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'typesetting',
-                      color: Colors.white,
-                      fontSize: 36,
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.white, // Set your desired background color here
-                    borderRadius: BorderRadius.circular(12.0), // Adjust the radius as needed
-                  ),
-                  child: ListTile(
-                    leading: SvgPicture.asset(
-                      'assets/images/ic_menu.svg',
-                      width: 16.0,
-                      height: 16.0,
-                    ),
-                    title: const Text('الأذكار'),
-                    textColor: AppColors.c4Actionbar,
-                    onTap: () {
-                      // onToggle();
-                    },
-                  ),
-                )
+    return Drawer(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(topRight: Radius.circular(0))),
+        width: 260,
+        child: Container(
+          color: AppColors.c1Drawer.withOpacity(0.7),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              _buildHeader(),
+              _buildFirstListTile(
+                'assets/images/ic_menu.svg',
+                'الأذكار',
+                AppColors.c4Actionbar,
+              ),
+              _buildListTile(
+                'assets/images/baseline_settings_24.svg',
+                'الإعدادات',
+                AppColors.white,
+              ),
+              _buildListTile(
+                'assets/images/baseline_error_24_white.svg',
+                'عن التطبيق',
+                AppColors.white,
+              ),
+            ],
 
-                ,
-                Container(
-                  child: ListTile(
-                    leading: SvgPicture.asset(
-                      'assets/images/baseline_settings_24.svg',
-                      width: 24.0,
-                      height: 24.0,
-                      color: AppColors.white,
-                    ),
-                    title: const Text('الإعدادات'),
-                    textColor: AppColors.white,
-                    onTap: () {
-                      // onToggle();
-                    },
-                  ),
-                ),
-                Container(
-                  child: ListTile(
-                    leading: SvgPicture.asset(
-                      'assets/images/baseline_error_24_white.svg',
-                      width: 24.0,
-                      height: 24.0,
-                    ),
-                    title: const Text('عن التطبيق'),
-                    textColor: AppColors.white,
-                    onTap: () {
-                      // onToggle();
-                    },
-                  ),
-                ),
-              ],
-            ),
+            //     ),
           ),
         ));
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.only(left: 14, bottom: 14, top: 14, right: 14),
+      decoration: BoxDecoration(
+        color: AppColors.c4Actionbar.withOpacity(0.7)
+      ),
+      child: Text(
+        "ۛ ּڝــحۡــۑْۧــحۡ اﻷذڪــٰٱڕ",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontFamily: 'typesetting',
+          color: Colors.white,
+          fontSize: 40,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFirstListTile(String asset, String title, Color textColor) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: ListTile(
+        leading: SvgPicture.asset(
+          asset,
+          width: 16.0,
+          height: 16.0,
+        ),
+        title: Text(title),
+        textColor: textColor,
+        onTap: () {
+          // Handle onTap
+        },
+      ),
+    );
+  }
+
+  Widget _buildListTile(String asset, String title, Color textColor) {
+    return ListTile(
+      leading: SvgPicture.asset(
+        asset,
+        width: 24.0,
+        height: 24.0,
+      ),
+      title: Text(title),
+      textColor: textColor,
+      onTap: () {
+        // Handle onTap
+      },
+    );
   }
 }
