@@ -2,6 +2,8 @@ import 'package:azkar/core/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../pages/SettingPage.dart';
+
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({
     Key? key,
@@ -26,11 +28,13 @@ class DrawerWidget extends StatelessWidget {
                 AppColors.c4Actionbar,
               ),
               _buildListTile(
+                context,
                 'assets/images/baseline_settings_24.svg',
                 'الإعدادات',
                 AppColors.white,
               ),
               _buildListTile(
+                context,
                 'assets/images/baseline_error_24_white.svg',
                 'عن التطبيق',
                 AppColors.white,
@@ -77,7 +81,7 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildListTile(String asset, String title, Color textColor) {
+  Widget _buildListTile(BuildContext context,String asset, String title, Color textColor) {
     return ListTile(
       leading: SvgPicture.asset(
         asset,
@@ -87,7 +91,21 @@ class DrawerWidget extends StatelessWidget {
       title: Text(title),
       textColor: textColor,
       onTap: () {
-        // Handle onTap
+        switch (title) {
+          case 'الإعدادات':
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const SettingPage(),
+              ),
+            );
+            break;
+          case 'عن التطبيق':
+          // Code block 2
+            break;
+          default:
+          // Default code block
+        }
       },
     );
   }

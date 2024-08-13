@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app_theme.dart';
 import 'core/colors.dart';
-import 'features/ziker/presentation/pages/AzkarTitlePage.dart';
+import 'features/ziker/presentation/pages/TitlePage.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
