@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/colors.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../bloc/AzkarTitlesBloc.dart';
+import '../widgets/titlePageWidget/TitlesListPageWidget.dart';
+import '../widgets/titlePageWidget/message_display_widget.dart';
 
 class AzkarTitlePage extends StatefulWidget {
   const AzkarTitlePage({super.key});
@@ -41,30 +43,36 @@ class _MyHomePageState extends State<AzkarTitlePage> {
   Widget _drawerAndBody() {
     return Scaffold(
         key: _scaffoldKey,
-        drawer: DrawerWidget()
         body: _buildBody(),
-    );
+        drawer: const Opacity(
+          opacity: 0.7,
+          child: DrawerWidget(),
+        ));
   }
-  Widget _buildBody(){
-    return GestureDetector( onTap: () {
-      Padding(
-        padding: const EdgeInsets.all(10),
-        child: BlocBuilder<AzkarTitlesBloc, AzkarTitlesState>(
-          builder: (context, state) {
-            if (state is LoadingAzkarTitlesState) {
-              // return LoadingWidget();
-            } else if (state is LoadedAzkarTitlesState) {
-              // return RefreshIndicator(
-              //     onRefresh: () => _onRefresh(context),
-              //     child: Container()//PostListWidget(posts: state.posts)
-              // );
-            } else if (state is ErrorAzkarTitlesState) {
-              // return MessageDisplayWidget(message: state.message);
-            }
-            return const LoadingWidget();
-          },
-        ),
-      );
-    });
+
+  Widget _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: BlocBuilder<AzkarTitlesBloc, AzkarTitlesState>(
+        builder: (context, state) {
+          // return Container(
+          //     child: Text("state $state",
+          //         textAlign: TextAlign.center,
+          //         style: TextStyle(fontSize: 40, color: AppColors.c1Drawer)));
+          if (state is LoadingAzkarTitlesState) {
+            print("sate: 1");
+            return LoadingWidget();
+          } else if (state is LoadedAzkarTitlesState) {
+            print("sate: 2");
+            return Container(child: AzkarListWidget(azkar: state.azkar));
+          } else if (state is ErrorAzkarTitlesState) {
+            print("sate: 3");
+            return MessageDisplayWidget(message: state.message);
+          }
+          print("sate: 4");
+          return const LoadingWidget();
+        },
+      ),
+    );
   }
 }

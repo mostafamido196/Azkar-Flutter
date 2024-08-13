@@ -11,10 +11,11 @@ class DrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topRight: Radius.circular(0))),
+            borderRadius: BorderRadius.only(topRight: Radius.circular(0))
+        ),
         width: 260,
         child: Container(
-          color: AppColors.c1Drawer.withOpacity(0.7),
+          color: AppColors.c1Drawer,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -42,8 +43,8 @@ class DrawerWidget extends StatelessWidget {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.only(left: 14, bottom: 14, top: 14, right: 14),
-      decoration: BoxDecoration(color: AppColors.c4Actionbar.withOpacity(0.7)),
-      child: Text(
+      decoration: BoxDecoration(color: AppColors.c4Actionbar),
+      child: const Text(
         "ۛ ּڝــحۡــۑْۧــحۡ اﻷذڪــٰٱڕ",
         textAlign: TextAlign.center,
         style: TextStyle(
@@ -70,7 +71,7 @@ class DrawerWidget extends StatelessWidget {
         title: Text(title),
         textColor: textColor,
         onTap: () {
-          // Handle onTap
+       //   Handle onTap
         },
       ),
     );

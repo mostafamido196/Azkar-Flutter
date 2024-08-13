@@ -18,8 +18,9 @@ class AzkarTitlesBloc extends Bloc<AzkarTitlesEvent, AzkarTitlesState> {
     on<AzkarTitlesEvent>((event, emit) async {
       if (event is GetAllAzkarTitlesEvent) {
         emit(LoadingAzkarTitlesState());
-
+        print("azkar title block");
         final failureOrPosts = await getAzkarTitles();
+        print("is success: ${failureOrPosts.isRight()}");
         emit(_mapFailureOrAzkarToState(failureOrPosts));
       }
 
