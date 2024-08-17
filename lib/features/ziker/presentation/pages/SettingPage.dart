@@ -11,6 +11,7 @@ class SettingPage extends StatelessWidget {
     return Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
+          resizeToAvoidBottomInset : false,
           appBar: _buildAppbar(context),
           body: _buildBody(),
         ));
