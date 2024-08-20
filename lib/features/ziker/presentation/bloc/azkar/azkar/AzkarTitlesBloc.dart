@@ -2,9 +2,9 @@ import 'package:azkar/features/ziker/domain/usecases/GetAllAzkarUsecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/strings/failures.dart';
-import '../../domain/entities/Ziker.dart';
+import '../../../../../../core/error/failures.dart';
+import '../../../../../../core/strings/failures.dart';
+import '../../../../domain/entities/Ziker.dart';
 
 part 'AzkarTitlesEvent.dart';
 part 'AzkarTitlesState.dart';
@@ -16,7 +16,9 @@ class AzkarTitlesBloc extends Bloc<AzkarTitlesEvent, AzkarTitlesState> {
     required this.getAzkarTitles,
   }) : super(AzkarTitlesInitial()) {
     on<AzkarTitlesEvent>((event, emit) async {
+      print("event: $event");
       if (event is GetAllAzkarTitlesEvent) {
+        print("event is GetAllAzkarTitlesEvent");
         emit(LoadingAzkarTitlesState());
         print("azkar title block");
         final failureOrPosts = await getAzkarTitles();

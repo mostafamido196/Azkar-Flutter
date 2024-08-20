@@ -1,10 +1,15 @@
+import 'dart:ffi';
+
+import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:azkar/features/ziker/presentation/widgets/titlePageWidget/DrawerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../core/Utils.dart';
 import '../../../../core/colors.dart';
 import '../../../../core/widgets/loading_widget.dart';
-import '../bloc/AzkarTitlesBloc.dart';
+import '../../domain/entities/Setting.dart';
+import '../bloc/azkar/azkar/AzkarTitlesBloc.dart';
 import '../widgets/titlePageWidget/TitlesListPageWidget.dart';
 import '../widgets/titlePageWidget/message_display_widget.dart';
 
@@ -29,7 +34,22 @@ class _MyHomePageState extends State<AzkarTitlePage> {
   }
 
   AppBar _appBar() => AppBar(
-      title: Text('صحيح الأذكار'),
+      title: BlocBuilder<AzkarTitlesBloc, AzkarTitlesState>(
+        builder: (context, state) {
+          // print('mos state:${state}');
+          if (state is LoadedAzkarTitlesState) {
+            // print('mos LoadedAzkarTitlesState');
+            return Text(
+              'صحيح الأذكار',
+              style: TextStyle(fontSize: Utils().fontSize(state.azkar.first.font)),
+            );
+          } else if (state is ErrorAzkarTitlesState) {
+            // print('mos ErrorAzkarTitlesState e:${state.message}');
+          }
+          // print('mos else');
+          return const Text('صحيح الأذكار');
+        },
+      ),
       leading: IconButton(
           icon: Icon(Icons.dehaze),
           onPressed: () {
@@ -55,21 +75,13 @@ class _MyHomePageState extends State<AzkarTitlePage> {
       padding: const EdgeInsets.all(10),
       child: BlocBuilder<AzkarTitlesBloc, AzkarTitlesState>(
         builder: (context, state) {
-          // return Container(
-          //     child: Text("state $state",
-          //         textAlign: TextAlign.center,
-          //         style: TextStyle(fontSize: 40, color: AppColors.c1Drawer)));
           if (state is LoadingAzkarTitlesState) {
-            print("sate: 1");
             return LoadingWidget();
           } else if (state is LoadedAzkarTitlesState) {
-            print("sate: 2");
             return Container(child: AzkarListWidget(azkar: state.azkar));
           } else if (state is ErrorAzkarTitlesState) {
-            print("sate: 3");
             return MessageDisplayWidget(message: state.message);
           }
-          print("sate: 4");
           return const LoadingWidget();
         },
       ),

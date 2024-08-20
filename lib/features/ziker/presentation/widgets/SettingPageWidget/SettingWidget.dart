@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/colors.dart';
@@ -10,7 +11,8 @@ class SettingWidget extends StatefulWidget {
 }
 
 class _SettingWidgetState extends State<SettingWidget> {
-  String? _selectedSize;
+  int? _selectedSize = 2;
+  double _textSize = 18.0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +27,31 @@ class _SettingWidgetState extends State<SettingWidget> {
     );
   }
 
+  void _handleRadioValueChange(int? value) {
+    setState(() {
+      _selectedSize = value!;
+      switch (_selectedSize) {
+        case 1:
+          _textSize = 16.0;
+          break;
+        case 2:
+          _textSize = 18.0;
+          break;
+        case 3:
+          _textSize = 20.0;
+          break;
+      }
+    });
+  }
   Widget _fontSetting(BuildContext context) {
+    return _content(context);
+  }
+  Widget _content(BuildContext context) {
     return Container(
         margin: const EdgeInsets.only(right: 14, left: 14, top: 18),
         width: double.infinity,
-        // padding: EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          // color: Colors.green,
-          borderRadius: BorderRadius.circular(16.0), // Rounded corners
+          borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(children: <Widget>[
           _titleSettingRow('إعدادات الخطوط'),
@@ -42,66 +61,53 @@ class _SettingWidgetState extends State<SettingWidget> {
         ]));
   }
 
+
+
   Widget _titleSettingRow(String title) {
     return Container(
       padding: EdgeInsets.all(8.0),
       width: double.infinity,
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        color: AppColors.c4Actionbar, // Background color
+        color: AppColors.c4Actionbar,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16.0), // Top left corner
-          topRight: Radius.circular(16.0), // Top right corner
-        ), // Rounded corners
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
+        ),
       ),
       child: Text(
         title,
         style: TextStyle(
-          color: Colors.white, // Text color
-          fontSize: 16.0, // Font size
+          color: Colors.white,
+          fontSize: 18.0,
         ),
       ),
     );
   }
 
-  Widget _radioButtons(BuildContext context, int index) {
-    return Container(
-        width: 50,
-        height: 50,
-        child: Expanded(
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _selectedSize = _getValue(index);
-              });
-            },
-            child:  Wrap(
-                // spacing: 8.0, // gap between adjacent chips
-                // runSpacing: 1.0, // gap between lines
-                direction: Axis.vertical, // main axis (rows or columns)
-                children: <Widget>[
-                  Row(
-              // mainAxisSize: MainAxisSize.min,
-              children: [
-                Radio<String>(
-                  value: _getValue(index),
-                  groupValue: _selectedSize,
-                  onChanged: (String? value) {
-                    setState(() {
-                      _selectedSize = value;
-                    });
-                  },
-                ),
-                SizedBox(width: 1.0),
-                // Adjust this value to control the space
-                Text(
-                  _getTypeSize(index),
-                  style: TextStyle(color: Colors.black, fontSize: 14.0),
-                ),
-        ])],
-            ),
-          ),
-        ));
+  Widget _radioButton(BuildContext context, int index) {
+    return Wrap(
+      direction: Axis.vertical,
+      children: <Widget>[
+        GestureDetector(
+            onTap: () => _handleRadioValueChange(index),
+            child: Container(
+                height: 28,
+                child: Row(children: [
+                  Radio<int>(
+                    value: index,
+                    groupValue: _selectedSize,
+                    onChanged: _handleRadioValueChange,
+                  ),
+                  Text(
+                    _getTypeSize(index),
+                    style: TextStyle(color: Colors.black, fontSize: 16.0),
+                  ),
+                ])))
+      ],
+    );
+    // ),
+    // ));
   }
 
   String _getValue(int index) {
@@ -127,44 +133,49 @@ class _SettingWidgetState extends State<SettingWidget> {
       color: AppColors.c3,
       padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
       alignment: Alignment.centerRight,
-      child: const Text(
+      child: Text(
         'بسم الله الرحمن الرحيم',
-        style: TextStyle(fontSize: 18, color: AppColors.c4Actionbar),
+        style: TextStyle(
+            fontSize: _textSize, color: AppColors.c4Actionbar),
       ),
     );
   }
 
   Widget _fontRadioRow() {
     return Container(
-        color: AppColors.white,
-        padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
-        alignment: Alignment.centerRight,
-        child: SingleChildScrollView(
-          child: Row(
-            // mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              const Text(
-                'حجم الخط:',
-                style: TextStyle(fontSize: 18, color: AppColors.c4Actionbar),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _radioButtons(context, 1),
-                  _radioButtons(context, 2),
-                  _radioButtons(context, 3),
-                ],
-              )
-            ],
-          ),
-        ));
+      color: AppColors.white,
+      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      alignment: Alignment.centerRight,
+      child: Row(
+        children: <Widget>[_tv('حجم الخط:'), _radioGroup(context)],
+      ),
+    );
+  }
+
+  Widget _tv(String str) {
+    return Text(
+      str,
+      style: TextStyle(
+          fontSize: 18.0, color: AppColors.c4Actionbar),
+    );
   }
 
   Widget _space() {
     return Container(
       color: AppColors.c4Actionbar,
       height: 4,
+    );
+  }
+
+  Widget _radioGroup(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _radioButton(context, 1),
+        _radioButton(context, 2),
+        _radioButton(context, 3),
+      ],
     );
   }
 }

@@ -1,0 +1,79 @@
+import 'package:azkar/features/ziker/domain/usecases/GetAllAzkarUsecase.dart';
+import 'package:azkar/features/ziker/domain/usecases/GetOldSettingUsecase.dart';
+import 'package:azkar/features/ziker/domain/usecases/SetNewSettingUsecase.dart';
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../../core/error/failures.dart';
+import '../../../../../../core/strings/failures.dart';
+import '../../../../../../core/strings/messages.dart';
+import '../../../../domain/entities/Setting.dart';
+
+part 'SettingEvent.dart';
+
+part 'SettingState.dart';
+
+class SettingBloc extends Bloc<SettingEvent, SettingState> {
+  final GetOldSettingUsecase getSettingUsecase;
+  final UpdateSettingUsecase updateSettingUsecase;
+
+  SettingBloc({
+    required this.getSettingUsecase,
+    required this.updateSettingUsecase,
+  }) : super(SettingInitial()) {
+    on<SettingEvent>((event, emit) async {
+      print("SettingBloc state: $state");
+      print("SettingBloc event: $event");
+      if (event is GetOldSettingEvent) {
+        print("1");
+        emit(LoadingSettingState());
+        print("2");
+        final failureOrPosts = await getSettingUsecase();
+        print("3");
+        emit(_mapFailureOrSettingToState(failureOrPosts));
+        print("4");
+      } else if (event is UpdateSettingEvent) {
+        emit(LoadingSettingState());
+        final failureOrDoneMessage = await updateSettingUsecase(event.setting);
+        emit(
+          _eitherDoneMessageOrErrorState(
+              failureOrDoneMessage, UPDATE_SUCCESS_MESSAGE),
+        );
+      }
+    });
+  }
+
+
+  SettingState _eitherDoneMessageOrErrorState(
+      Either<Failure, Unit> either, String message) {
+    return either.fold(
+          (failure) => ErrorSettingState(
+        message: _mapFailureToMessage(failure),
+      ),
+          (_) => MessageUpdateSettingState(message: message),
+    );
+  }
+
+  SettingState _mapFailureOrSettingToState(Either<Failure, Setting> either) {
+    return either.fold(
+      (failure) => ErrorSettingState(message: _mapFailureToMessage(failure)),
+      (result) => LoadedSettingState(
+        setting: result,
+      ),
+    );
+  }
+
+  String _mapFailureToMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        return SERVER_FAILURE_MESSAGE;
+      case EmptyCacheFailure:
+        return EMPTY_CACHE_FAILURE_MESSAGE;
+      case OfflineFailure:
+        return OFFLINE_FAILURE_MESSAGE;
+      default:
+        return "Unexpected Error , Please try again later .";
+    }
+  }
+}

@@ -1,5 +1,12 @@
+import 'package:azkar/core/FontSize.dart';
+import 'package:azkar/core/error/exceptions.dart';
+import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:azkar/features/ziker/presentation/widgets/SettingPageWidget/SettingWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/Utils.dart';
+import '../../domain/entities/Setting.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({
@@ -11,7 +18,7 @@ class SettingPage extends StatelessWidget {
     return Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          resizeToAvoidBottomInset : false,
+          resizeToAvoidBottomInset: false,
           appBar: _buildAppbar(context),
           body: _buildBody(),
         ));
@@ -19,16 +26,56 @@ class SettingPage extends StatelessWidget {
 
   AppBar _buildAppbar(BuildContext context) {
     return AppBar(
-      title: const Text("الإعدادات"),
+      title: BlocBuilder<SettingBloc, SettingState>(
+        builder: (context, state) {
+          // print('mos state:${state}');
+          if (state is LoadingSettingState) {
+            return const Text('الإعدادات');
+          } else if (state is LoadingSettingState) {
+            return const Text('الإعدادات');
+          } else if (state is LoadedSettingState) {
+            return Text(
+              'الإعدادات',
+              style:
+                  TextStyle(fontSize: Utils().fontSize(state.setting.fontSize)),
+            );
+          } else if (state is ErrorSettingState) {
+            return Text(
+              'الإعدادات',
+              style: TextStyle(fontSize: Utils().fontSize(FontSize.Median)),
+            );
+          }
+          return const Text('الإعدادات');
+        },
+      ),
       actions: <Widget>[
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text(
-            "تم",
-            style: TextStyle(
-                color: Colors.white, fontSize: 18), // Set font size here
+          child: BlocBuilder<SettingBloc, SettingState>(
+            builder: (context, state) {
+              print("seetingstate: $state");
+              if (state is LoadingSettingState) {
+                return const Text('تم');
+              } else if (state is LoadedSettingState) {
+                return Text(
+                  'تم',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Utils().fontSize(state.setting.fontSize)),
+                );
+              } else if (state is ErrorSettingState) {
+                return Text(
+                  'تم',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Utils().fontSize(FontSize.Median)),
+                );
+              }
+              return const Text('تم');
+            },
           ),
         ),
       ],

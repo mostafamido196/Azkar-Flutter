@@ -11,6 +11,7 @@ class GetAllAzkarUsecase {
   GetAllAzkarUsecase(this.repository);
 
   Future<Either<Failure, List<Ziker>>> call() async {
+    // print('GetAllAzkarUsecase');
     return await repository.getAllAzkar();
   }
 }

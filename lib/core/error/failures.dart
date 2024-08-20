@@ -16,4 +16,12 @@ class EmptyCacheFailure extends Failure {
   @override
   List<Object?> get props => [];
 }
+class UnKnownFailure extends Failure {
+  final String? message;
+  UnKnownFailure({
+    required this.message
+});
+  @override
+  List<Object?> get props => [message];
+}
 

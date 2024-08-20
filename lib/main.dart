@@ -1,4 +1,5 @@
-import 'package:azkar/features/ziker/presentation/bloc/AzkarTitlesBloc.dart';
+import 'package:azkar/features/ziker/presentation/bloc/azkar/azkar/AzkarTitlesBloc.dart';
+import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,8 +16,7 @@ void main() async {
       debugShowCheckedModeBanner: false,
       home: Directionality(
         textDirection: TextDirection.rtl,
-        child:
-        MyApp(),
+        child: MyApp(),
       ),
     ),
   );
@@ -32,12 +32,13 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (_) =>
                   di.sl<AzkarTitlesBloc>()..add(GetAllAzkarTitlesEvent())),
+          BlocProvider(
+              create: (_) => di.sl<SettingBloc>()..add(GetOldSettingEvent())),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: appTheme,
             title: 'صحيح الأذكار',
-            home: const AzkarTitlePage())
-    );
+            home: const AzkarTitlePage()));
   }
 }

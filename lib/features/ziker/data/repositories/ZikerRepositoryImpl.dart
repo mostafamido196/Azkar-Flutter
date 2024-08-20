@@ -1,5 +1,5 @@
 
-import 'package:azkar/features/ziker/data/datasources/Ziker_LocalDataSource.dart';
+import 'package:azkar/features/ziker/data/datasources/ZikerLocalDataSource.dart';
 import 'package:azkar/features/ziker/domain/entities/Ziker.dart';
 import 'package:dartz/dartz.dart';
 
@@ -9,17 +9,18 @@ import '../../domain/repositories/ZikerRepository.dart';
 
 
 class Zikerrepositoryimpl implements ZikerRepository {
-  final ZikerLocaldatasource localDataSource;
+  final ZikerLocalDataSource zikerDataSource;
 
   Zikerrepositoryimpl(
       {
-        required this.localDataSource,
+        required this.zikerDataSource,
        });
 
   @override
   Future<Either<Failure, List<Ziker>>> getAllAzkar()  async {
+    // print('Zikerrepositoryimpl');
       try {
-        final localPosts = await localDataSource.getZikerList();
+        final localPosts = await zikerDataSource.getZikerList();
         return Right(localPosts);
       } on EmptyCacheException {
         return Left(EmptyCacheFailure());

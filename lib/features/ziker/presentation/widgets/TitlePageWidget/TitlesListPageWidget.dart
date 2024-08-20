@@ -1,4 +1,7 @@
+import 'package:azkar/core/FontSize.dart';
+import 'package:azkar/core/Utils.dart';
 import 'package:azkar/core/colors.dart';
+import 'package:azkar/features/ziker/domain/entities/Setting.dart';
 import 'package:azkar/features/ziker/domain/entities/Ziker.dart';
 import 'package:flutter/material.dart';
 
@@ -32,8 +35,8 @@ class AzkarListWidget extends StatelessWidget {
           child: ListTile(
             title: Text(
               azkar[index].name,
-              style: const TextStyle(
-                  fontSize: 18,
+              style: TextStyle(
+                  fontSize: Utils().fontSize(azkar.first.font),
                   // fontWeight: FontWeight.bold
                   ),
             ),
@@ -60,4 +63,6 @@ class AzkarListWidget extends StatelessWidget {
       },
     );*/
   }
+
+
 }
