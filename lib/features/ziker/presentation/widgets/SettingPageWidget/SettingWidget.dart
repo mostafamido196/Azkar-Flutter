@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/FontSize.dart';
+import '../../../../../core/Utils.dart';
 import '../../../../../core/colors.dart';
+import '../../bloc/azkar/setting/SettingBloc.dart';
 
 class SettingWidget extends StatefulWidget {
   const SettingWidget({Key? key}) : super(key: key);
@@ -43,9 +47,11 @@ class _SettingWidgetState extends State<SettingWidget> {
       }
     });
   }
+
   Widget _fontSetting(BuildContext context) {
     return _content(context);
   }
+
   Widget _content(BuildContext context) {
     return Container(
         margin: const EdgeInsets.only(right: 14, left: 14, top: 18),
@@ -54,16 +60,14 @@ class _SettingWidgetState extends State<SettingWidget> {
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(children: <Widget>[
-          _titleSettingRow('إعدادات الخطوط'),
+          _titleSettingRow(),
           _testFontBorerRow(),
           _fontRadioRow(),
           _space()
         ]));
   }
 
-
-
-  Widget _titleSettingRow(String title) {
+  Widget _titleSettingRow() {
     return Container(
       padding: EdgeInsets.all(8.0),
       width: double.infinity,
@@ -75,17 +79,26 @@ class _SettingWidgetState extends State<SettingWidget> {
           topRight: Radius.circular(16.0),
         ),
       ),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18.0,
-        ),
+      child: BlocBuilder<SettingBloc, SettingState>(
+        builder: (context, state) {
+          if (state is LoadedSettingState) {
+            return Text('إعدادات الخطوط',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: Utils().fontSize(state.setting.fontSize),
+                ));
+          }
+          return Text('إعدادات الخطوط',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: Utils().fontSize(FontSize.Median),
+              ));
+        },
       ),
     );
   }
-
-  Widget _radioButton(BuildContext context, int index) {
+  Widget _radioButton(BuildContext context, int index, FontSize fontSize) {
+   _initialSizeState(fontSize);
     return Wrap(
       direction: Axis.vertical,
       children: <Widget>[
@@ -101,7 +114,9 @@ class _SettingWidgetState extends State<SettingWidget> {
                   ),
                   Text(
                     _getTypeSize(index),
-                    style: TextStyle(color: Colors.black, fontSize: 16.0),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: Utils().fontSize(fontSize)),
                   ),
                 ])))
       ],
@@ -110,14 +125,7 @@ class _SettingWidgetState extends State<SettingWidget> {
     // ));
   }
 
-  String _getValue(int index) {
-    if (index == 1) {
-      return 'small';
-    } else if (index == 2) {
-      return 'median';
-    }
-    return 'high';
-  }
+
 
   String _getTypeSize(int index) {
     if (index == 1) {
@@ -133,11 +141,20 @@ class _SettingWidgetState extends State<SettingWidget> {
       color: AppColors.c3,
       padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
       alignment: Alignment.centerRight,
-      child: Text(
-        'بسم الله الرحمن الرحيم',
-        style: TextStyle(
-            fontSize: _textSize, color: AppColors.c4Actionbar),
-      ),
+      child: BlocBuilder<SettingBloc, SettingState>(builder: (context, state) {
+        if (state is LoadedSettingState) {
+          return Text(
+            'بسم الله الرحمن الرحيم',
+            style: TextStyle(
+                fontSize: Utils().fontSize(state.setting.fontSize),
+                color: AppColors.c4Actionbar),
+          );
+        }
+        return Text(
+          'بسم الله الرحمن الرحيم',
+          style: TextStyle(fontSize: _textSize, color: AppColors.c4Actionbar),
+        );
+      }),
     );
   }
 
@@ -147,16 +164,27 @@ class _SettingWidgetState extends State<SettingWidget> {
       padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Row(
-        children: <Widget>[_tv('حجم الخط:'), _radioGroup(context)],
+        children: <Widget>[_tv('حجم الخط:'), _radioGroupBloc(context)],
       ),
     );
   }
 
   Widget _tv(String str) {
-    return Text(
-      str,
-      style: TextStyle(
-          fontSize: 18.0, color: AppColors.c4Actionbar),
+    return BlocBuilder<SettingBloc, SettingState>(
+      builder: (context, state) {
+        if (state is LoadedSettingState) {
+          return Text(str,
+              style: TextStyle(
+                color: AppColors.c4Actionbar,
+                fontSize: Utils().fontSize(state.setting.fontSize),
+              ));
+        }
+
+        return Text(
+          str,
+          style: TextStyle(fontSize: 18.0, color: AppColors.c4Actionbar),
+        );
+      },
     );
   }
 
@@ -167,15 +195,47 @@ class _SettingWidgetState extends State<SettingWidget> {
     );
   }
 
-  Widget _radioGroup(BuildContext context) {
+  Widget _radioGroupBloc(BuildContext context) {
+    return BlocBuilder<SettingBloc, SettingState>(
+      builder: (context, state) {
+        if (state is LoadedSettingState) {
+          return _radioGroup(state.setting.fontSize);
+        }
+
+        return _radioGroup(FontSize.Median);
+      },
+    );
+  }
+
+  Widget _radioGroup(FontSize fontSize) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _radioButton(context, 1),
-        _radioButton(context, 2),
-        _radioButton(context, 3),
+        _radioButton(context, 1, fontSize),
+        _radioButton(context, 2, fontSize),
+        _radioButton(context, 3, fontSize),
       ],
     );
   }
+  bool isInitialedSize = true;
+  void _initialSizeState(FontSize fontSize) {
+    if(isInitialedSize) {
+      isInitialedSize = false;
+      switch (fontSize) {
+        case FontSize.Median:
+          _selectedSize = 2;
+          break;
+        case FontSize.Small:
+          _selectedSize = 1;
+          break;
+        case FontSize.Large:
+          _selectedSize = 3;
+          break;
+      }
+    }
+  }
+
+
+
 }

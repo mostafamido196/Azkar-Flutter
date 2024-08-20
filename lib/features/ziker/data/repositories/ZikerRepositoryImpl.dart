@@ -18,7 +18,6 @@ class Zikerrepositoryimpl implements ZikerRepository {
 
   @override
   Future<Either<Failure, List<Ziker>>> getAllAzkar()  async {
-    // print('Zikerrepositoryimpl');
       try {
         final localPosts = await zikerDataSource.getZikerList();
         return Right(localPosts);

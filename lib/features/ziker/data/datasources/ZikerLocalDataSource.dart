@@ -23,7 +23,6 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
 
   @override
   Future<List<ZikerResponse>> getZikerList() {
-    // print('ZikerLocalDataSourceImpl start');
     final listOfZikerModel = <ZikerResponse>[
       ZikerResponse(
           1,
@@ -633,7 +632,6 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
           ],
           _getTextSize())
     ];
-    // print('ZikerLocalDataSourceImpl end');
 
     return Future.value(listOfZikerModel);
   }

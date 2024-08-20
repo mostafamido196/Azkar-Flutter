@@ -36,17 +36,13 @@ class _MyHomePageState extends State<AzkarTitlePage> {
   AppBar _appBar() => AppBar(
       title: BlocBuilder<AzkarTitlesBloc, AzkarTitlesState>(
         builder: (context, state) {
-          // print('mos state:${state}');
           if (state is LoadedAzkarTitlesState) {
-            // print('mos LoadedAzkarTitlesState');
             return Text(
               'صحيح الأذكار',
               style: TextStyle(fontSize: Utils().fontSize(state.azkar.first.font)),
             );
           } else if (state is ErrorAzkarTitlesState) {
-            // print('mos ErrorAzkarTitlesState e:${state.message}');
           }
-          // print('mos else');
           return const Text('صحيح الأذكار');
         },
       ),

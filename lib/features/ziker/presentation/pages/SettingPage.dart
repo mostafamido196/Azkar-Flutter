@@ -28,7 +28,6 @@ class SettingPage extends StatelessWidget {
     return AppBar(
       title: BlocBuilder<SettingBloc, SettingState>(
         builder: (context, state) {
-          // print('mos state:${state}');
           if (state is LoadingSettingState) {
             return const Text('الإعدادات');
           } else if (state is LoadingSettingState) {
@@ -55,7 +54,6 @@ class SettingPage extends StatelessWidget {
           },
           child: BlocBuilder<SettingBloc, SettingState>(
             builder: (context, state) {
-              print("seetingstate: $state");
               if (state is LoadingSettingState) {
                 return const Text('تم');
               } else if (state is LoadedSettingState) {

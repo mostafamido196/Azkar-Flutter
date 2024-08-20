@@ -21,7 +21,6 @@ class SettingRepositoryImpl implements SettingRepository {
       final localPosts = await settingDataSource.getOldSetting();
       return Right(localPosts as SettingResponse);
     } on EmptyCacheException {
-      print("settingRepoImp EmptyCacheException");
       return Left(EmptyCacheFailure());
     }
   }

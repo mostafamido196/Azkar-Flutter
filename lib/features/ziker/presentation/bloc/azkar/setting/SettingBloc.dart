@@ -23,16 +23,10 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
     required this.updateSettingUsecase,
   }) : super(SettingInitial()) {
     on<SettingEvent>((event, emit) async {
-      print("SettingBloc state: $state");
-      print("SettingBloc event: $event");
       if (event is GetOldSettingEvent) {
-        print("1");
         emit(LoadingSettingState());
-        print("2");
         final failureOrPosts = await getSettingUsecase();
-        print("3");
         emit(_mapFailureOrSettingToState(failureOrPosts));
-        print("4");
       } else if (event is UpdateSettingEvent) {
         emit(LoadingSettingState());
         final failureOrDoneMessage = await updateSettingUsecase(event.setting);
