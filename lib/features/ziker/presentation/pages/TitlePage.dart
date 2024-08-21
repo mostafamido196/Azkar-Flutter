@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:azkar/core/FontSize.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:azkar/features/ziker/presentation/widgets/titlePageWidget/DrawerWidget.dart';
 import 'package:flutter/material.dart';
@@ -37,12 +38,24 @@ class _MyHomePageState extends State<AzkarTitlePage> {
       title: BlocBuilder<AzkarTitlesBloc, AzkarTitlesState>(
         builder: (context, state) {
           if (state is LoadedAzkarTitlesState) {
-            return Text(
-              'صحيح الأذكار',
-              style: TextStyle(fontSize: Utils().fontSize(state.azkar.first.font)),
+            return BlocBuilder<SettingBloc, SettingState>(
+              builder: (context, state) {
+                if (state is LoadedSettingState) {
+                  return Text(
+                    'صحيح الأذكار',
+                    style: TextStyle(
+                        fontSize: Utils().fontSize(state.setting.fontSize)),
+                  );
+                }
+
+                return Text(
+                  'صحيح الأذكار',
+                  style: TextStyle(
+                      fontSize: Utils().fontSize(FontSize.Median)),
+                );
+              },
             );
-          } else if (state is ErrorAzkarTitlesState) {
-          }
+          } else if (state is ErrorAzkarTitlesState) {}
           return const Text('صحيح الأذكار');
         },
       ),

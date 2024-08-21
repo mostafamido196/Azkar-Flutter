@@ -7,6 +7,6 @@ import '../../domain/entities/Ziker.dart';
 
 class ZikerResponse extends Ziker {
   const ZikerResponse(
-      int id, String name, List<Hadith> arr, FontSize font)
-      : super(id, name, arr, font);
+      int id, String name, List<Hadith> arr)
+      : super(id, name, arr, );
 }

@@ -48,7 +48,7 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
                 1,
                 0),
           ],
-          _getTextSize()),
+          ),
       ZikerResponse(
           2,
           "أَذْكَارُ الصباح",
@@ -148,7 +148,7 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
                 3,
                 0),
           ],
-          _getTextSize()),
+          ),
       ZikerResponse(
           3,
           "الاذكار والدعوات دبر الصلواتَ المكتوبات",
@@ -217,7 +217,7 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
                 1,
                 0),
           ],
-          _getTextSize()),
+          ),
       ZikerResponse(
           4,
           "أَذْكَارُ المساء",
@@ -301,7 +301,7 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
                 3,
                 0),
           ],
-          _getTextSize()),
+          ),
       ZikerResponse(
           5,
           "أَذْكَارُ ما قبل النَّومِ",
@@ -424,7 +424,7 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
                 1,
                 0),
           ],
-          _getTextSize()),
+          ),
       ZikerResponse(
           6,
           "من جوامع الدعاء من الصحيحين",
@@ -630,19 +630,10 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
                 1,
                 0),
           ],
-          _getTextSize())
+          )
     ];
 
     return Future.value(listOfZikerModel);
   }
 
-  FontSize _getTextSize() {
-    String? jsonString = sharedPreferences.getString(CACHED_SETTING);
-    if (jsonString != null) {
-      SettingResponse response =jsonDecode(jsonString) as SettingResponse;
-      return response.fontSize;
-    } else {
-      return FontSize.Median;
-    }
-  }
 }

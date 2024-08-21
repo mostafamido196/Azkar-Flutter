@@ -10,13 +10,11 @@ class Ziker extends Equatable {
   final int id;
   final String name;
   final List<Hadith> arr;
-  final FontSize font;
 
   const Ziker(
      this.id,
      this.name,
      this.arr,
-      this.font
   );
 
   @override
