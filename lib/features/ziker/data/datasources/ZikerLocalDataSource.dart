@@ -17,9 +17,6 @@ abstract class ZikerLocalDataSource {
 }
 
 class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
-  final SharedPreferences sharedPreferences;
-
-  ZikerLocalDataSourceImpl({required this.sharedPreferences});
 
   @override
   Future<List<ZikerResponse>> getZikerList() {
@@ -30,7 +27,7 @@ class ZikerLocalDataSourceImpl implements ZikerLocalDataSource {
           <HadithResponse>[
             HadithResponse(
               1,
-              "يمسح آثار النوم عن وجهه بكفه ، وقراءة العشر الآيات الاخيرة من سورة ال عمران :﴿ إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٍ لِأُولِي الْأَلْبَابِ * ..... الآيات.  ",
+              "يمسح آثار النوم عن وجهه بكفه ، وقراءة العشر الآيات الاخيرة من سورة ال عمران :﴿ إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٍ لِأُولِي الْأَلْبَابِ * ..... الآيات.",
               "البخاري 4569",
               1,
               0,

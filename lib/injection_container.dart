@@ -34,7 +34,7 @@ Future<void> init() async {
 
   // Datasources
   sl.registerLazySingleton<ZikerLocalDataSource>(
-      () => ZikerLocalDataSourceImpl(sharedPreferences: sl()));
+      () => ZikerLocalDataSourceImpl());
   sl.registerLazySingleton<SettingDataSource>(
           () => SettingDataSourceImpl(sharedPreferences: sl()));
 

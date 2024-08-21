@@ -103,7 +103,10 @@ class _SettingWidgetState extends State<SettingWidget> {
       direction: Axis.vertical,
       children: <Widget>[
         GestureDetector(
-            onTap: () => _handleRadioValueChange(index),
+            onTap: () => {
+              _handleRadioValueChange(index)
+            //   BlocProvider.of<SettingBloc>(context).add(UpdateSettingEvent(setting: _getSetting(index)))
+            },
             child: Container(
                 height: 28,
                 child: Row(children: [
