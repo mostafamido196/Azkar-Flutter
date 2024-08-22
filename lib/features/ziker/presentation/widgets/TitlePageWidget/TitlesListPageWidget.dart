@@ -19,18 +19,20 @@ class AzkarListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: AppColors.c2Read,
-        child:
-        BlocBuilder<SettingBloc, SettingState>(
+        child: BlocBuilder<SettingBloc, SettingState>(
           builder: (context, state) {
+            print('List screen state: ${state}');
             if (state is LoadedSettingState) {
+              print('mos fontSize: ${state.setting.fontSize}');
               return ListView.builder(
                 itemCount: azkar.length,
                 itemBuilder: (context, index) {
                   return _itemList(index,state.setting.fontSize);
                 },
               );
+            } else if(state is ErrorSettingState){
+              print('List screen error message: ${state.message}');
             }
-
             return ListView.builder(
               itemCount: azkar.length,
               itemBuilder: (context, index) {

@@ -9,9 +9,9 @@ import '../../../../core/error/failures.dart';
 import '../models/SettingModel.dart';
 
 abstract class SettingDataSource {
-  Future<List<SettingResponse>> getOldSetting();
+  Future<SettingResponse> getOldSetting();
 
-  Future<Either<Failure, Unit>> UpdateSetting(SettingResponse setting);
+  Future<Either<Failure, Unit>> updateSetting(SettingResponse setting);
 }
 
 const CACHED_SETTING = "CACHED_SETTING";
@@ -22,24 +22,32 @@ class SettingDataSourceImpl implements SettingDataSource {
   SettingDataSourceImpl({required this.sharedPreferences});
 
   @override
-  Future<List<SettingResponse>> getOldSetting() async {
+  Future<SettingResponse> getOldSetting() async {
     String? jsonString = sharedPreferences.getString(CACHED_SETTING);
+
     if (jsonString != null) {
-      return Future.value(jsonDecode(jsonString));
+      // Decode the JSON string into a Map
+      Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+
+      // Convert the map into a SettingResponse instance
+      SettingResponse setting = SettingResponse.fromJson(jsonMap);
+
+      return Future.value(setting);
     } else {
       throw EmptyCacheException();
     }
   }
 
+
   @override
-  Future<Either<Failure, Unit>> UpdateSetting(
-      SettingResponse settingModel) async {
+  Future<Either<Failure, Unit>> updateSetting(SettingResponse settingModel) async {
     try {
-      await sharedPreferences.setString(
-          CACHED_SETTING, jsonEncode(settingModel));
+      final jsonString = jsonEncode(settingModel.toJson());
+      await sharedPreferences.setString(CACHED_SETTING, jsonString);
       return Right(unit);
     } catch (e) {
       return Left(UnKnownFailure(message: e.toString()));
     }
   }
+
 }

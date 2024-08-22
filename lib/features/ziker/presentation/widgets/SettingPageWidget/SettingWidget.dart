@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/FontSize.dart';
 import '../../../../../core/Utils.dart';
 import '../../../../../core/colors.dart';
+import '../../../domain/entities/Setting.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
 
 class SettingWidget extends StatefulWidget {
@@ -97,15 +98,15 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
+
   Widget _radioButton(BuildContext context, int index, FontSize fontSize) {
-   _initialSizeState(fontSize);
+    _initialSizeState(fontSize);
     return Wrap(
       direction: Axis.vertical,
       children: <Widget>[
         GestureDetector(
-            onTap: () => {
-              _handleRadioValueChange(index)
-            //   BlocProvider.of<SettingBloc>(context).add(UpdateSettingEvent(setting: _getSetting(index)))
+            onTap: () {
+              _handleRadioValueChange(index);
             },
             child: Container(
                 height: 28,
@@ -113,10 +114,15 @@ class _SettingWidgetState extends State<SettingWidget> {
                   Radio<int>(
                     value: index,
                     groupValue: _selectedSize,
-                    onChanged: _handleRadioValueChange,
+                    onChanged: (value){
+                      _handleRadioValueChange(value);
+                      BlocProvider.of<SettingBloc>(context)
+                          .add(UpdateSettingEvent(setting: _getFontSetting(index)));
+
+                    },
                   ),
                   Text(
-                    _getTypeSize(index),
+                    _getTypeSizeArabic(index),
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: Utils().fontSize(fontSize)),
@@ -128,9 +134,7 @@ class _SettingWidgetState extends State<SettingWidget> {
     // ));
   }
 
-
-
-  String _getTypeSize(int index) {
+  String _getTypeSizeArabic(int index) {
     if (index == 1) {
       return 'صغير';
     } else if (index == 2) {
@@ -221,9 +225,11 @@ class _SettingWidgetState extends State<SettingWidget> {
       ],
     );
   }
+
   bool isInitialedSize = true;
+
   void _initialSizeState(FontSize fontSize) {
-    if(isInitialedSize) {
+    if (isInitialedSize) {
       isInitialedSize = false;
       switch (fontSize) {
         case FontSize.Median:
@@ -239,6 +245,21 @@ class _SettingWidgetState extends State<SettingWidget> {
     }
   }
 
+  FontSize _getFontType(int index) {
+    switch (index) {
+      case 1:
+        return FontSize.Small;
+      case 3:
+        return FontSize.Large;
+    }
+    return FontSize.Median;
+  }
 
-
+  Setting _getFontSetting(int index) {
+    return Setting(
+        fontSize: _getFontType(index),
+        noisy: false,
+        vibrate: true,
+        notify: true);
+  }
 }

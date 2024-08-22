@@ -56,14 +56,16 @@ class SettingPage extends StatelessWidget {
             builder: (context, state) {
               if (state is LoadingSettingState) {
                 return const Text('تم');
-              } else if (state is LoadedSettingState) {
+              }
+              else if (state is LoadedSettingState) {
                 return Text(
                   'تم',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: Utils().fontSize(state.setting.fontSize)),
                 );
-              } else if (state is ErrorSettingState) {
+              }
+              else if (state is ErrorSettingState) {
                 return Text(
                   'تم',
                   style: TextStyle(
@@ -72,7 +74,12 @@ class SettingPage extends StatelessWidget {
                       fontSize: Utils().fontSize(FontSize.Median)),
                 );
               }
-              return const Text('تم');
+              return Text('تم',style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Utils().fontSize(FontSize.Median)
+              )
+              );
             },
           ),
         ),
