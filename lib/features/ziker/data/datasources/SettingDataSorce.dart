@@ -28,8 +28,6 @@ class SettingDataSourceImpl implements SettingDataSource {
     if (jsonString != null) {
       // Decode the JSON string into a Map
       Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-
-      // Convert the map into a SettingResponse instance
       SettingResponse setting = SettingResponse.fromJson(jsonMap);
 
       return Future.value(setting);
