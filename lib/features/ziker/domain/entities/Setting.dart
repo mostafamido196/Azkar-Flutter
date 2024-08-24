@@ -6,12 +6,13 @@ import '../../../../core/FontSize.dart';
 
 
 class Setting extends Equatable {
-  final FontSize fontSize;
-  final bool noisy;
-  final bool vibrate;
-  final bool notify;
+   FontSize fontSize;
+   bool noisy;
+   bool vibrate;
+   bool notify;
+   bool transfer;
 
-   Setting({required this.fontSize,required  this.noisy,required  this.vibrate,required  this.notify});
+   Setting({required this.fontSize,required  this.noisy,required  this.vibrate,required  this.notify,required this.transfer});
 
   @override
   List<Object?> get props => [fontSize,noisy,vibrate,notify];

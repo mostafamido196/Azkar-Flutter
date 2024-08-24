@@ -11,8 +11,9 @@ class SettingResponse extends Setting {
     required bool noisy,
     required bool vibrate,
     required bool notify,
+    required bool transfer,
   }) : super(
-            fontSize: fontSize, noisy: noisy, vibrate: vibrate, notify: notify);
+            fontSize: fontSize, noisy: noisy, vibrate: vibrate, notify: notify,transfer:transfer );
 
   @override
   factory SettingResponse.fromJson(Map<String, dynamic> json) {
@@ -21,6 +22,7 @@ class SettingResponse extends Setting {
       noisy: json['noisy'],
       vibrate: json['vibrate'],
       notify: json['notify'],
+      transfer: json['transfer'],
     );
   }
 
@@ -31,6 +33,7 @@ class SettingResponse extends Setting {
       'noisy': noisy,
       'vibrate': vibrate,
       'notify': notify,
+      'transfer': transfer,
     };
   }
 

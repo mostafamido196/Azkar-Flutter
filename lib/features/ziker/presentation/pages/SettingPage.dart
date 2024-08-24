@@ -9,9 +9,10 @@ import '../../../../core/Utils.dart';
 import '../../domain/entities/Setting.dart';
 
 class SettingPage extends StatelessWidget {
-  const SettingPage({
+   SettingPage({
     Key? key,
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
