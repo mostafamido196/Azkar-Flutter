@@ -26,6 +26,14 @@ class SettingPage extends StatelessWidget {
 
   AppBar _buildAppbar(BuildContext context) {
     return AppBar(
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          BlocProvider.of<SettingBloc>(context)
+              .add(GetOldSettingEvent());
+          Navigator.pop(context);
+        },
+      ),
       title: BlocBuilder<SettingBloc, SettingState>(
         builder: (context, state) {
           if (state is LoadingSettingState) {
@@ -50,6 +58,8 @@ class SettingPage extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
+            BlocProvider.of<SettingBloc>(context)
+                .add(GetOldSettingEvent());
             Navigator.pop(context);
           },
           child: BlocBuilder<SettingBloc, SettingState>(
@@ -61,6 +71,7 @@ class SettingPage extends StatelessWidget {
                 return Text(
                   'تم',
                   style: TextStyle(
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: Utils().fontSize(state.setting.fontSize)),
                 );

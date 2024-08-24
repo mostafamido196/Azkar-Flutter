@@ -13,34 +13,30 @@ class DrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topRight: Radius.circular(0))
-        ),
+            borderRadius: BorderRadius.only(topRight: Radius.circular(0))),
         width: 260,
         child: Container(
           color: AppColors.c1Drawer,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              _buildHeader(),
-              _buildFirstListTile(
-                'assets/images/ic_menu.svg',
-                'الأذكار',
-                AppColors.c4Actionbar,
-              ),
-              _buildListTile(
-                context,
-                'assets/images/baseline_settings_24.svg',
-                'الإعدادات',
-                AppColors.white,
-              ),
-              _buildListTile(
-                context,
-                'assets/images/baseline_error_24_white.svg',
-                'عن التطبيق',
-                AppColors.white,
-              ),
-            ]
-          ),
+          child: ListView(padding: EdgeInsets.zero, children: [
+            _buildHeader(),
+            _buildFirstListTile(
+              'assets/images/ic_menu.svg',
+              'الأذكار',
+              AppColors.c4Actionbar,
+            ),
+            _buildListTile(
+              context,
+              'assets/images/baseline_settings_24.svg',
+              'الإعدادات',
+              AppColors.white,
+            ),
+            _buildListTile(
+              context,
+              'assets/images/baseline_error_24_white.svg',
+              'عن التطبيق',
+              AppColors.white,
+            ),
+          ]),
         ));
   }
 
@@ -75,13 +71,14 @@ class DrawerWidget extends StatelessWidget {
         title: Text(title),
         textColor: textColor,
         onTap: () {
-       //   Handle onTap
+          //   Handle onTap
         },
       ),
     );
   }
 
-  Widget _buildListTile(BuildContext context,String asset, String title, Color textColor) {
+  Widget _buildListTile(
+      BuildContext context, String asset, String title, Color textColor) {
     return ListTile(
       leading: SvgPicture.asset(
         asset,
@@ -91,6 +88,9 @@ class DrawerWidget extends StatelessWidget {
       title: Text(title),
       textColor: textColor,
       onTap: () {
+        if (Scaffold.of(context).isDrawerOpen) {
+          Navigator.of(context).pop();
+        }
         switch (title) {
           case 'الإعدادات':
             Navigator.push(
@@ -101,7 +101,7 @@ class DrawerWidget extends StatelessWidget {
             );
             break;
           case 'عن التطبيق':
-          // Code block 2
+            // Code block 2
             break;
           default:
           // Default code block

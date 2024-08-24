@@ -23,7 +23,7 @@ class AzkarListWidget extends StatelessWidget {
           builder: (context, state) {
             print('List screen state: ${state}');
             if (state is LoadedSettingState) {
-              print('mos fontSize: ${state.setting.fontSize}');
+              print('List screen fontSize: ${state.setting.fontSize}: ${Utils().fontSize(state.setting.fontSize)}');
               return ListView.builder(
                 itemCount: azkar.length,
                 itemBuilder: (context, index) {
