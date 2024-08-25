@@ -51,6 +51,7 @@ class _SettingWidgetState extends State<SettingWidget> {
           children: <Widget>[
             _fontSetting(context),
             _counterSetting(context),
+            _notifySetting(context)
           ],
         ),
       ),
@@ -100,6 +101,25 @@ class _SettingWidgetState extends State<SettingWidget> {
           _titleSettingRow('إعدادات السبحة'),
           _transferSettingRow(),
           _spaceBetween(),
+          _vibrateSettingRow(),
+          _spaceBetween(),
+          _noiseSettingRow(),
+          _space()
+        ]));
+  }
+
+  Widget _notifySetting(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.only(right: 14, left: 14, top: 18),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Column(children: <Widget>[
+          _titleSettingRow('إعدادات الإشعارات'),
+          _walkUpNotifySettingRow(),
+          _spaceBetween(),
+          _sleepNotifySettingRow(),
           _space()
         ]));
   }
@@ -139,14 +159,9 @@ class _SettingWidgetState extends State<SettingWidget> {
                     groupValue: _selectedSize,
                     onChanged: (value) {
                       _handleRadioValueChange(value);
-                      BlocProvider.of<SettingBloc>(context).add(
-                          UpdateSettingEvent(
-                              setting: Setting(
-                                  fontSize: _getFontType(index),
-                                  noisy: setting.notify,
-                                  vibrate: setting.vibrate,
-                                  notify: setting.notify,
-                                  transfer: setting.transfer)));
+                      setting.fontSize = _getFontType(index);
+                      BlocProvider.of<SettingBloc>(context)
+                          .add(UpdateSettingEvent(setting: setting));
                     },
                   ),
                   Text(
@@ -201,10 +216,73 @@ class _SettingWidgetState extends State<SettingWidget> {
       alignment: Alignment.centerRight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        // Positions text at start and switcher at end
         children: <Widget>[
           Expanded(child: _tv('الإنتقال للذكر التالي بعد انتهاء العد')),
           _transferSwitcher()
+        ],
+      ),
+    );
+  }
+
+  Widget _vibrateSettingRow() {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // Positions text at start and switcher at end
+        children: <Widget>[
+          Expanded(child: _tv('الإهتزاز عند الإنتقال للذكر التالي')),
+          _vibrateSwitcher()
+        ],
+      ),
+    );
+  }
+
+  Widget _noiseSettingRow() {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // Positions text at start and switcher at end
+        children: <Widget>[
+          Expanded(child: _tv('تشغيل الصوت عند استخدام السبحة')),
+          _noiseSwitcher()
+        ],
+      ),
+    );
+  }
+
+  Widget _walkUpNotifySettingRow() {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // Positions text at start and switcher at end
+        children: <Widget>[
+          Expanded(child: _tv('الاستيقاظ من النوم')),
+          _sleepNotifySwitcher()
+        ],
+      ),
+    );
+  }
+
+  Widget _sleepNotifySettingRow() {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // Positions text at start and switcher at end
+        children: <Widget>[
+          Expanded(child: _tv('النوم')),
+          _sleepNotifySwitcher()
         ],
       ),
     );
@@ -299,13 +377,80 @@ class _SettingWidgetState extends State<SettingWidget> {
           setState(() {
             setting.transfer = value;
           });
-          BlocProvider.of<SettingBloc>(context).add(UpdateSettingEvent(
-              setting: Setting(
-                  fontSize: setting.fontSize,
-                  noisy: setting.notify,
-                  vibrate: setting.vibrate,
-                  notify: setting.notify,
-                  transfer: value)));
+          BlocProvider.of<SettingBloc>(context)
+              .add(UpdateSettingEvent(setting: setting));
+        },
+        activeTrackColor: AppColors.switch_track_selector,
+        activeColor: AppColors.c4Actionbar,
+      ),
+    );
+  }
+
+  Widget _vibrateSwitcher() {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Switch(
+        value: setting.vibrate,
+        onChanged: (value) {
+          setState(() {
+            setting.vibrate = value;
+          });
+          BlocProvider.of<SettingBloc>(context)
+              .add(UpdateSettingEvent(setting: setting));
+        },
+        activeTrackColor: AppColors.switch_track_selector,
+        activeColor: AppColors.c4Actionbar,
+      ),
+    );
+  }
+
+  Widget _noiseSwitcher() {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Switch(
+        value: setting.noisy,
+        onChanged: (value) {
+          setState(() {
+            setting.noisy = value;
+          });
+          BlocProvider.of<SettingBloc>(context)
+              .add(UpdateSettingEvent(setting: setting));
+        },
+        activeTrackColor: AppColors.switch_track_selector,
+        activeColor: AppColors.c4Actionbar,
+      ),
+    );
+  }
+
+  Widget _walkUpNotifySwitcher() {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Switch(
+        value: true, //setting.noisy,
+        onChanged: (value) {
+          // setState(() {
+          //   setting.noisy = value;
+          // });
+          // BlocProvider.of<SettingBloc>(context)
+          //     .add(UpdateSettingEvent(setting: setting));
+        },
+        activeTrackColor: AppColors.switch_track_selector,
+        activeColor: AppColors.c4Actionbar,
+      ),
+    );
+  }
+
+  Widget _sleepNotifySwitcher() {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Switch(
+        value: true, //setting.noisy,
+        onChanged: (value) {
+          // setState(() {
+          //   setting.noisy = value;
+          // });
+          // BlocProvider.of<SettingBloc>(context)
+          //     .add(UpdateSettingEvent(setting: setting));
         },
         activeTrackColor: AppColors.switch_track_selector,
         activeColor: AppColors.c4Actionbar,
@@ -321,5 +466,42 @@ class _SettingWidgetState extends State<SettingWidget> {
       this.setting = setting;
       _initialSizeState(setting.fontSize);
     }
+  }
+
+  TimeOfDay _selectedTime = TimeOfDay.now();
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+    if (picked != null && picked != _selectedTime) {
+      setState(() {
+        _selectedTime = picked;
+      });
+    }
+  }
+
+  Widget _pickerWalkUp() {
+    return
+        Container(
+        color: AppColors.white,
+        padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+        alignment: Alignment.centerRight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              'selec${_selectedTime.format(context)}',
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => _selectTime(context),
+              child: Text('Pick Time'),
+            ),
+          ],
+        )
+    );
   }
 }

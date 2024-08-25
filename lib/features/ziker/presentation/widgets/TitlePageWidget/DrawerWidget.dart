@@ -96,7 +96,7 @@ class DrawerWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => SettingPage(),
+                builder: (_) => const SettingScreen(),
               ),
             );
             break;

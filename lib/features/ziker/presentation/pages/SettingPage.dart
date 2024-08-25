@@ -1,15 +1,13 @@
 import 'package:azkar/core/FontSize.dart';
-import 'package:azkar/core/error/exceptions.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:azkar/features/ziker/presentation/widgets/SettingPageWidget/SettingWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/Utils.dart';
-import '../../domain/entities/Setting.dart';
 
-class SettingPage extends StatelessWidget {
-   SettingPage({
+class SettingScreen extends StatelessWidget {
+    const SettingScreen({
     Key? key,
   }) : super(key: key);
 
