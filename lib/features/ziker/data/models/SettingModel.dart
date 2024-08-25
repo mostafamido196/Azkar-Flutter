@@ -10,10 +10,9 @@ class SettingResponse extends Setting {
     required FontSize fontSize,
     required bool noisy,
     required bool vibrate,
-    required bool notify,
     required bool transfer,
   }) : super(
-            fontSize: fontSize, noisy: noisy, vibrate: vibrate, notify: notify,transfer:transfer );
+            fontSize: fontSize, noisy: noisy, vibrate: vibrate,transfer:transfer );
 
   @override
   factory SettingResponse.fromJson(Map<String, dynamic> json) {
@@ -21,7 +20,6 @@ class SettingResponse extends Setting {
       fontSize: _retrieveFont(json['fontSize']) , // Convert int to FontSize
       noisy: json['noisy'],
       vibrate: json['vibrate'],
-      notify: json['notify'],
       transfer: json['transfer'],
     );
   }
@@ -32,7 +30,6 @@ class SettingResponse extends Setting {
       'fontSize': _storeFont(fontSize), // Convert FontSize to int
       'noisy': noisy,
       'vibrate': vibrate,
-      'notify': notify,
       'transfer': transfer,
     };
   }

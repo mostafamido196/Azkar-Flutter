@@ -19,11 +19,14 @@ class SettingWidget extends StatefulWidget {
 class _SettingWidgetState extends State<SettingWidget> {
   int? _selectedSize = 2; // to make test text widget
   double _textSize = 18.0; // to make test widget
+
+  bool isInitialedSize = true; // to initialize setting first time only
+  TimeOfDay _selectedTime = TimeOfDay.now(); // to use pick up time
+
   Setting setting = Setting(
       fontSize: FontSize.Median,
       noisy: true,
       vibrate: true,
-      notify: true,
       transfer: true);
 
   @override
@@ -139,7 +142,7 @@ class _SettingWidgetState extends State<SettingWidget> {
         child: Text(title,
             style: TextStyle(
               color: Colors.white,
-              fontSize: Utils().fontSize(setting.fontSize),
+              fontSize: Utils().fontSize(setting.fontSize)+2,
             )));
   }
 
@@ -159,9 +162,15 @@ class _SettingWidgetState extends State<SettingWidget> {
                     groupValue: _selectedSize,
                     onChanged: (value) {
                       _handleRadioValueChange(value);
-                      setting.fontSize = _getFontType(index);
                       BlocProvider.of<SettingBloc>(context)
-                          .add(UpdateSettingEvent(setting: setting));
+                          .add(UpdateSettingEvent(setting:
+                      Setting(
+                        transfer: setting.transfer,
+                        fontSize: _getFontType(index),
+                        noisy: setting.noisy,
+                        vibrate: setting.vibrate,
+                      )
+                      ));
                     },
                   ),
                   Text(
@@ -261,12 +270,16 @@ class _SettingWidgetState extends State<SettingWidget> {
       color: AppColors.white,
       padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
       alignment: Alignment.centerRight,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        // Positions text at start and switcher at end
-        children: <Widget>[
-          Expanded(child: _tv('الاستيقاظ من النوم')),
-          _sleepNotifySwitcher()
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(child: _tv('الاستيقاظ من النوم')),
+              _sleepNotifySwitcher()
+            ],
+          ),
+          _pickerWalkUpRow()
         ],
       ),
     );
@@ -458,8 +471,6 @@ class _SettingWidgetState extends State<SettingWidget> {
     );
   }
 
-  bool isInitialedSize = true;
-
   void _initialSetting(Setting setting) {
     if (isInitialedSize) {
       isInitialedSize = false;
@@ -467,8 +478,6 @@ class _SettingWidgetState extends State<SettingWidget> {
       _initialSizeState(setting.fontSize);
     }
   }
-
-  TimeOfDay _selectedTime = TimeOfDay.now();
 
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -482,26 +491,27 @@ class _SettingWidgetState extends State<SettingWidget> {
     }
   }
 
-  Widget _pickerWalkUp() {
-    return
-        Container(
-        color: AppColors.white,
-        padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
-        alignment: Alignment.centerRight,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              'selec${_selectedTime.format(context)}',
-              style: TextStyle(fontSize: 24),
+  Widget _pickerWalkUpRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          _selectedTime.format(context).replaceArabicNumbers(),
+          style: TextStyle(fontSize: Utils().fontSize(setting.fontSize)),
+        ),
+        SizedBox(height: 16),
+        GestureDetector(
+          onTap: () => _selectTime(context),
+          child: const Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Icon(
+              Icons.edit,
+              size: 24,
+              color: Colors.black,
             ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => _selectTime(context),
-              child: Text('Pick Time'),
-            ),
-          ],
-        )
+          ),
+        ),
+      ],
     );
   }
 }
