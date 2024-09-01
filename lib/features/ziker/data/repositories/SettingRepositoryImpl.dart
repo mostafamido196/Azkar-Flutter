@@ -28,11 +28,22 @@ class SettingRepositoryImpl implements SettingRepository {
   @override
   Future<Either<Failure, Unit>> updateSetting(Setting setting) async {
     try {
-      await settingDataSource.updateSetting(SettingResponse(fontSize:setting.fontSize,noisy:setting.noisy,vibrate:setting.vibrate,transfer: setting.transfer));
+      await settingDataSource.updateSetting(SettingResponse(
+        fontSize: setting.fontSize,
+        noisy: setting.noisy,
+        vibrate: setting.vibrate,
+        transfer: setting.transfer,
+        walkUp: setting.walkUp,
+        sleep: setting.sleep,
+        fager: setting.fager,
+        duher: setting.duher,
+        aser: setting.aser,
+        magrep: setting.magrep,
+        isha: setting.isha,
+      ));
       return Right(unit);
     } catch (e) {
-      return Left(UnKnownFailure(message:e.toString()));
-
+      return Left(UnKnownFailure(message: e.toString()));
     }
   }
 }

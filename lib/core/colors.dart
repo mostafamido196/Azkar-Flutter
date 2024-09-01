@@ -20,6 +20,7 @@ class AppColors {
   static const Color ceruleanBlue30 = Color(0x4C006EE9);
   static const Color cornflower = Color(0xFF696CFF);
   static const Color statusBarColor = Color(0xFF303D43);
+  static const Color bgReloudColor = Color(0xFF303D43);
   static const Color switch_track_selector = Color.fromRGBO(60, 86, 101,0.4);
   static const Color switch_track_un_selector = Color.fromRGBO(60, 86, 101,0.7);
 }

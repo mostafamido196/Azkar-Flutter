@@ -24,6 +24,7 @@ class SettingDataSourceImpl implements SettingDataSource {
   @override
   Future<SettingResponse> getOldSetting() async {
     String? jsonString = sharedPreferences.getString(CACHED_SETTING);
+    print('data source get setting: $jsonString');
 
     if (jsonString != null) {
       // Decode the JSON string into a Map
@@ -39,6 +40,7 @@ class SettingDataSourceImpl implements SettingDataSource {
 
   @override
   Future<Either<Failure, Unit>> updateSetting(SettingResponse settingModel) async {
+  print('data source update setting: $settingModel');
     try {
       final jsonString = jsonEncode(settingModel.toJson());
       await sharedPreferences.setString(CACHED_SETTING, jsonString);

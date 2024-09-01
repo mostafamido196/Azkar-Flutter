@@ -1,7 +1,9 @@
 import 'package:azkar/core/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../bloc/azkar/setting/SettingBloc.dart';
 import '../../pages/SettingPage.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -96,7 +98,7 @@ class DrawerWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => const SettingScreen(),
+                builder: (_) =>  SettingScreen(),
               ),
             );
             break;
