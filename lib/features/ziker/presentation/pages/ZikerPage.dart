@@ -1,43 +1,35 @@
-import 'dart:ffi';
-
 import 'package:azkar/core/FontSize.dart';
+import 'package:azkar/features/ziker/domain/entities/Ziker.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
+import 'package:azkar/features/ziker/presentation/widgets/ZikerPageWidget/ZikerPageWidget.dart';
 import 'package:azkar/features/ziker/presentation/widgets/titlePageWidget/DrawerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/Utils.dart';
-import '../../../../core/colors.dart';
 import '../../../../core/widgets/loading_widget.dart';
-import '../../domain/entities/Setting.dart';
 import '../bloc/azkar/azkar/AzkarTitlesBloc.dart';
 import '../widgets/titlePageWidget/TitlesListPageWidget.dart';
 import '../widgets/titlePageWidget/message_display_widget.dart';
 
-class AzkarTitlePage extends StatefulWidget {
-  const AzkarTitlePage({super.key});
+class ZikerPage extends StatelessWidget {
+  final String zikerTitle;
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<AzkarTitlePage> {
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  ZikerPage({required this.zikerTitle});
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          appBar: _appBar(),
-          body: _drawerAndBody(),
+          appBar: _appBar(context),
+          body: _buildBody(),
         ));
   }
 
-  AppBar _appBar() => AppBar(
-      title: BlocBuilder<AzkarTitlesBloc, AzkarTitlesState>(
+  AppBar _appBar(BuildContext context) => AppBar(
+      title: BlocBuilder<AzkarBloc, AzkarState>(
         builder: (context, state) {
-          if (state is LoadedAzkarTitlesState) {
+          if (state is LoadedAzkarState) {
             return BlocBuilder<SettingBloc, SettingState>(
               builder: (context, state) {
                 if (state is LoadedSettingState) {
@@ -50,45 +42,33 @@ class _MyHomePageState extends State<AzkarTitlePage> {
 
                 return Text(
                   'صحيح الأذكار',
-                  style: TextStyle(
-                      fontSize: Utils().fontSize(FontSize.Median)),
+                  style: TextStyle(fontSize: Utils().fontSize(FontSize.Median)),
                 );
               },
             );
-          } else if (state is ErrorAzkarTitlesState) {}
+          } else if (state is ErrorAzkarState) {}
           return const Text('صحيح الأذكار');
         },
       ),
       leading: IconButton(
-          icon: Icon(Icons.dehaze),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
-            if (_scaffoldKey.currentState!.isDrawerOpen == false) {
-              _scaffoldKey.currentState!.openDrawer();
-            } else {
-              _scaffoldKey.currentState!.openEndDrawer();
-            }
+            print('on pressed back');
+            Navigator.pop(context);
           }));
-
-  Widget _drawerAndBody() {
-    return Scaffold(
-        key: _scaffoldKey,
-        body: _buildBody(),
-        drawer: const Opacity(
-          opacity: 0.7,
-          child: DrawerWidget(),
-        ));
-  }
 
   Widget _buildBody() {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: BlocBuilder<AzkarTitlesBloc, AzkarTitlesState>(
+      child: BlocBuilder<AzkarBloc, AzkarState>(
         builder: (context, state) {
-          if (state is LoadingAzkarTitlesState) {
+          if (state is LoadingAzkarState) {
             return LoadingWidget();
-          } else if (state is LoadedAzkarTitlesState) {
-            return Container(child: AzkarListWidget(azkar: state.azkar));
-          } else if (state is ErrorAzkarTitlesState) {
+          } else if (state is LoadedAzkarState) {
+            Ziker ziker =
+                state.azkar.singleWhere((ziker) => ziker.name == zikerTitle);
+            return Container(child: ZikerPageWidget(azkar: ziker));
+          } else if (state is ErrorAzkarState) {
             return MessageDisplayWidget(message: state.message);
           }
           return const LoadingWidget();

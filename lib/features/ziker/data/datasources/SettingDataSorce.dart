@@ -27,7 +27,7 @@ class SettingDataSourceImpl implements SettingDataSource {
     print('data source get setting: $jsonString');
 
     if (jsonString != null) {
-      // Decode the JSON string into a Map
+      print('data source if (jsonString != null) { setting: $jsonString');
       Map<String, dynamic> jsonMap = jsonDecode(jsonString);
       SettingResponse setting = SettingResponse.fromJson(jsonMap);
 
@@ -46,6 +46,7 @@ class SettingDataSourceImpl implements SettingDataSource {
       await sharedPreferences.setString(CACHED_SETTING, jsonString);
       return Right(unit);
     } catch (e) {
+      print('data source catch e: ${e.toString()}');
       return Left(UnKnownFailure(message: e.toString()));
     }
   }

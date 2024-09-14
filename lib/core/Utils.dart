@@ -51,3 +51,28 @@ extension ArabicNumberReplacement on String {
         .replaceAll("PM", "مسائاً");
   }
 }
+extension ReplaceArabicString on int {
+  String replaceArabicString() {
+    switch (this) {
+      case 1:
+        return "مرة واحدة";
+      case 2:
+        return "مرتان";
+      case 3:
+        return "ثلاث مرات";
+      case 7:
+        return "سبع مرات";
+      case 10:
+        return "عشر مرات";
+      case 33:
+        return "ثلاث وثلاثون مرة";
+      case 34:
+        return "اربعة وثلاثون مرة";
+      case 100:
+        return "مئة مرة";
+      default:
+        return "مرة واحدة";
+    }
+  }
+}
+

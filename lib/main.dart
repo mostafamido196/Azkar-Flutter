@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app_theme.dart';
 import 'core/colors.dart';
-import 'features/ziker/presentation/pages/TitlePage.dart';
+import 'features/ziker/presentation/pages/MainPage.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
               create: (_) =>
-                  di.sl<AzkarTitlesBloc>()..add(GetAllAzkarTitlesEvent())),
+                  di.sl<AzkarBloc>()..add(GetAllAzkarTitlesEvent())),
           BlocProvider(
               create: (_) => di.sl<SettingBloc>()..add(GetOldSettingEvent())),
         ],
@@ -39,6 +39,6 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: appTheme,
             title: 'صحيح الأذكار',
-            home: const AzkarTitlePage()));
+            home: const MainPage()));
   }
 }

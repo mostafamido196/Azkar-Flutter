@@ -9,15 +9,15 @@ import '../../../../domain/entities/Ziker.dart';
 part 'AzkarTitlesEvent.dart';
 part 'AzkarTitlesState.dart';
 
-class AzkarTitlesBloc extends Bloc<AzkarTitlesEvent, AzkarTitlesState> {
+class AzkarBloc extends Bloc<AzkarTitlesEvent, AzkarState> {
 
   final GetAllAzkarUsecase getAzkarTitles;
-  AzkarTitlesBloc({
+  AzkarBloc({
     required this.getAzkarTitles,
-  }) : super(AzkarTitlesInitial()) {
+  }) : super(AzkarInitial()) {
     on<AzkarTitlesEvent>((event, emit) async {
       if (event is GetAllAzkarTitlesEvent) {
-        emit(LoadingAzkarTitlesState());
+        emit(LoadingAzkarState());
         final failureOrPosts = await getAzkarTitles();
         emit(_mapFailureOrAzkarToState(failureOrPosts));
       }
@@ -25,10 +25,10 @@ class AzkarTitlesBloc extends Bloc<AzkarTitlesEvent, AzkarTitlesState> {
     });
   }
 
-  AzkarTitlesState _mapFailureOrAzkarToState(Either<Failure, List<Ziker>> either) {
+  AzkarState _mapFailureOrAzkarToState(Either<Failure, List<Ziker>> either) {
     return either.fold(
-          (failure) => ErrorAzkarTitlesState(message: _mapFailureToMessage(failure)),
-          (azkar) => LoadedAzkarTitlesState(
+          (failure) => ErrorAzkarState(message: _mapFailureToMessage(failure)),
+          (azkar) => LoadedAzkarState(
          azkar: azkar,
       ),
     );

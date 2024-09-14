@@ -34,12 +34,19 @@ class SettingRepositoryImpl implements SettingRepository {
         vibrate: setting.vibrate,
         transfer: setting.transfer,
         walkUp: setting.walkUp,
+        isWalkUp: setting.isWalkUp,
         sleep: setting.sleep,
+        isSleep: setting.isSleep,
         fager: setting.fager,
+        isFager: setting.isFager,
         duher: setting.duher,
+        isDuher: setting.isDuher,
         aser: setting.aser,
+        isAser: setting.isAser,
         magrep: setting.magrep,
+        isMagrep: setting.isMagrep,
         isha: setting.isha,
+        isIsha: setting.isIsha,
       ));
       return Right(unit);
     } catch (e) {

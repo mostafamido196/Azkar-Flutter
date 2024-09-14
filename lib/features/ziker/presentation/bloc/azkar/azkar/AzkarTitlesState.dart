@@ -2,30 +2,30 @@
 part of 'AzkarTitlesBloc.dart';
 
 
-abstract class AzkarTitlesState extends Equatable {
-  const AzkarTitlesState();
+abstract class AzkarState extends Equatable {
+  const AzkarState();
 
   @override
   List<Object> get props => [];
 }
 
-class AzkarTitlesInitial extends AzkarTitlesState {}
+class AzkarInitial extends AzkarState {}
 
-class LoadingAzkarTitlesState extends AzkarTitlesState {}
+class LoadingAzkarState extends AzkarState {}
 
-class LoadedAzkarTitlesState extends AzkarTitlesState {
+class LoadedAzkarState extends AzkarState {
   final List<Ziker> azkar;
 
-  const LoadedAzkarTitlesState({required this.azkar});
+  const LoadedAzkarState({required this.azkar});
 
   @override
   List<Object> get props => [azkar];
 }
 
-class ErrorAzkarTitlesState extends AzkarTitlesState {
+class ErrorAzkarState extends AzkarState {
   final String message;
 
-  const ErrorAzkarTitlesState({required this.message});
+  const ErrorAzkarState({required this.message});
 
   @override
   List<Object> get props => [message];

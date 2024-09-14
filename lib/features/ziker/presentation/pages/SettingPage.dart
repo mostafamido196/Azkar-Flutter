@@ -21,12 +21,19 @@ class _SettingScreenState extends State<SettingScreen> {
     vibrate: true,
     transfer: true,
     walkUp: TimeOfDay.now(),
+    isWalkUp: true,
     sleep: TimeOfDay.now(),
+    isSleep: true,
     fager: TimeOfDay.now(),
+    isFager: true,
     duher: TimeOfDay.now(),
+    isDuher: true,
     aser: TimeOfDay.now(),
+    isAser: true,
     magrep: TimeOfDay.now(),
+    isMagrep: true,
     isha: TimeOfDay.now(),
+    isIsha: true,
   );
   int _fontSizeType = 2;
   bool isInitialedSize = true; // to initialize setting first time only
@@ -60,9 +67,7 @@ class _SettingScreenState extends State<SettingScreen> {
       title: BlocBuilder<SettingBloc, SettingState>(
         builder: (context, state) {
           if (state is LoadingSettingState) {
-            return const Text('الإعدادات');
-          } else if (state is LoadingSettingState) {
-            return const Text('الإعدادات');
+            // return const Text('الإعدادات');
           } else if (state is LoadedSettingState) {
             _initialSetting(state.setting);
             return Text(

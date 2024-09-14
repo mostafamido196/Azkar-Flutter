@@ -20,7 +20,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
 
   // Bloc
-  sl.registerFactory(() => AzkarTitlesBloc(getAzkarTitles: sl()));
+  sl.registerFactory(() => AzkarBloc(getAzkarTitles: sl()));
   sl.registerFactory(() => SettingBloc(getSettingUsecase: sl(), updateSettingUsecase: sl()));
 
   // Usecases

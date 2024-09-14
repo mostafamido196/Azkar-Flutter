@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/FontSize.dart';
 import '../../../../../core/Utils.dart';
 import '../../../../../core/colors.dart';
+import '../../../../../core/widgets/loading_widget.dart';
 import '../../../domain/entities/Setting.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
 
@@ -29,14 +30,6 @@ class _SettingWidgetState extends State<SettingWidget> {
   int _fontSizeType = 2; // to constant initial font size
 
   bool isInitialedSize = true; // to initialize setting first time only
-  // to use pick up time
-  TimeOfDay _selectedWalkUpTime = TimeOfDay.now();
-  TimeOfDay _selectedSleepTime = TimeOfDay.now();
-  TimeOfDay _selectedFagerTime = TimeOfDay.now();
-  TimeOfDay _selectedDuherTime = TimeOfDay.now();
-  TimeOfDay _selectedAserTime = TimeOfDay.now();
-  TimeOfDay _selectedMaghrepTime = TimeOfDay.now();
-  TimeOfDay _selectedIshaTime = TimeOfDay.now();
 
   late Setting setting;
 
@@ -62,8 +55,11 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _settingWidget(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 20, right: 6, left: 6, top: 12),
+    return  Container(
+        color: AppColors.c2Read,
+        margin: const EdgeInsets.only(top: 6),
+        child: SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 20, right: 6, left: 6),
       child: Column(
         children: <Widget>[
           _fontSetting(context),
@@ -72,7 +68,7 @@ class _SettingWidgetState extends State<SettingWidget> {
           _notifyPraysSetting(context),
         ],
       ),
-    );
+    ));
   }
 
   void _handleRadioValueChange(int? value) {
@@ -241,14 +237,6 @@ class _SettingWidgetState extends State<SettingWidget> {
                     groupValue: _getFontIndex(setting.fontSize),
                     onChanged: (value) {
                       _handleRadioValueChange(value);
-                      // BlocProvider.of<SettingBloc>(context)
-                      //     .add(UpdateSettingEvent(
-                      //         setting: Setting(
-                      //   transfer: setting.transfer,
-                      //   fontSize: _getFontType(index),
-                      //   noisy: setting.noisy,
-                      //   vibrate: setting.vibrate,
-                      // )) );
 
                       setState(() {
                         setting.fontSize = _getFontType(index);
@@ -306,7 +294,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _transferSettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -321,7 +309,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _vibrateSettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -337,7 +325,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _noiseSettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -353,7 +341,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _walkUpNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -373,7 +361,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _fagrNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -393,7 +381,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _duhrNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -413,7 +401,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _aserNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -433,7 +421,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _magrepNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -453,7 +441,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _ishaaNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -473,7 +461,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _sleepNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only(top: 6, bottom: 6, right: 8, left: 8),
+      padding: const EdgeInsets.only( right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -642,11 +630,10 @@ class _SettingWidgetState extends State<SettingWidget> {
     return Container(
       margin: const EdgeInsets.only(right: 10),
       child: Switch(
-        value: setting.walkUp != null,
+        value: setting.isWalkUp,
         onChanged: (value) {
           setState(() {
-            if (value == true) setting.walkUp = _selectedWalkUpTime;
-            else setting.walkUp = null;
+            setting.isWalkUp = value;
           });
           widget.onSettingChanged(setting);
         },
@@ -660,11 +647,10 @@ class _SettingWidgetState extends State<SettingWidget> {
     return Container(
       margin: const EdgeInsets.only(right: 10),
       child: Switch(
-        value: setting.fager != null,
+        value: setting.isFager,
         onChanged: (value) {
           setState(() {
-            if (value == true) setting.fager = _selectedFagerTime;
-            else setting.fager = null;
+            setting.isFager = value;
           });
           widget.onSettingChanged(setting);
         },
@@ -678,11 +664,10 @@ class _SettingWidgetState extends State<SettingWidget> {
     return Container(
       margin: const EdgeInsets.only(right: 10),
       child: Switch(
-        value: setting.duher != null,
+        value: setting.isDuher,
         onChanged: (value) {
           setState(() {
-            if (value == true) setting.duher = _selectedDuherTime;
-            else setting.duher = null;
+            setting.isDuher = value;
           });
           widget.onSettingChanged(setting);
         },
@@ -696,11 +681,10 @@ class _SettingWidgetState extends State<SettingWidget> {
     return Container(
       margin: const EdgeInsets.only(right: 10),
       child: Switch(
-        value: setting.aser != null,
+        value: setting.isAser,
         onChanged: (value) {
           setState(() {
-            if (value == true) setting.aser = _selectedAserTime;
-            else setting.aser = null;
+            setting.isAser = value;
           });
           widget.onSettingChanged(setting);
         },
@@ -714,11 +698,10 @@ class _SettingWidgetState extends State<SettingWidget> {
     return Container(
       margin: const EdgeInsets.only(right: 10),
       child: Switch(
-        value: setting.magrep != null,
+        value: setting.isMagrep,
         onChanged: (value) {
           setState(() {
-            if (value == true) setting.magrep = _selectedMaghrepTime;
-            else setting.magrep = null;
+            setting.isMagrep = value;
           });
           widget.onSettingChanged(setting);
         },
@@ -732,11 +715,10 @@ class _SettingWidgetState extends State<SettingWidget> {
     return Container(
       margin: const EdgeInsets.only(right: 10),
       child: Switch(
-        value: setting.isha != null,
+        value: setting.isIsha,
         onChanged: (value) {
           setState(() {
-            if (value == true) setting.isha = _selectedIshaTime;
-            else setting.isha = null;
+            setting.isIsha = value;
           });
           widget.onSettingChanged(setting);
         },
@@ -750,11 +732,10 @@ class _SettingWidgetState extends State<SettingWidget> {
     return Container(
       margin: const EdgeInsets.only(right: 10),
       child: Switch(
-        value: setting.sleep != null,
+        value: setting.isSleep,
         onChanged: (value) {
           setState(() {
-            if (value == true) setting.sleep = _selectedSleepTime;
-            else setting.walkUp = null;
+            setting.isSleep = value;
           });
           widget.onSettingChanged(setting);
         },
@@ -776,84 +757,91 @@ class _SettingWidgetState extends State<SettingWidget> {
   Future<void> _selectWalkUpTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedWalkUpTime,
+      initialTime: setting.walkUp,
     );
-    if (picked != null && picked != _selectedWalkUpTime) {
+    if (picked != null && picked != setting.walkUp) {
       setState(() {
-        _selectedWalkUpTime = picked;
+        setting.walkUp = picked;
       });
+      widget.onSettingChanged(setting);
     }
   }
 
   Future<void> _selectFagerTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedFagerTime,
+      initialTime: setting.fager,
     );
-    if (picked != null && picked != _selectedFagerTime) {
+    if (picked != null && picked != setting.fager) {
       setState(() {
-        _selectedFagerTime = picked;
+        setting.fager = picked;
       });
+      widget.onSettingChanged(setting);
     }
   }
 
   Future<void> _selectDuherTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedDuherTime,
+      initialTime: setting.duher,
     );
-    if (picked != null && picked != _selectedDuherTime) {
+    if (picked != null && picked != setting.duher) {
       setState(() {
-        _selectedDuherTime = picked;
+        setting.duher = picked;
       });
+      widget.onSettingChanged(setting);
     }
   }
 
   Future<void> _selectAserTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedAserTime,
+      initialTime: setting.aser,
     );
-    if (picked != null && picked != _selectedAserTime) {
+    if (picked != null && picked != setting.aser) {
       setState(() {
-        _selectedAserTime = picked;
+        setting.aser = picked;
       });
+      widget.onSettingChanged(setting);
     }
   }
 
   Future<void> _selectMagrapTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedMaghrepTime,
+      initialTime: setting.magrep,
     );
-    if (picked != null && picked != _selectedMaghrepTime) {
+    if (picked != null && picked != setting.magrep) {
       setState(() {
-        _selectedMaghrepTime = picked;
+        setting.magrep = picked;
       });
+      widget.onSettingChanged(setting);
     }
   }
 
   Future<void> _selectIshaTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedIshaTime,
+      initialTime: setting.isha,
     );
-    if (picked != null && picked != _selectedIshaTime) {
+    if (picked != null && picked != setting.isha) {
       setState(() {
-        _selectedIshaTime = picked;
+        setting.isha = picked;
       });
+      widget.onSettingChanged(setting);
     }
   }
 
   Future<void> _selectSleepTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedSleepTime,
+      initialTime: setting.sleep,
     );
-    if (picked != null && picked != _selectedSleepTime) {
+    if (picked != null && picked != setting.sleep) {
       setState(() {
-        _selectedSleepTime = picked;
+        setting.sleep = picked;
       });
+      widget.onSettingChanged(setting);
     }
   }
 
@@ -862,7 +850,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          _selectedWalkUpTime.format(context).replaceArabicNumbers(),
+          setting.walkUp.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
         const SizedBox(height: 16),
@@ -886,7 +874,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          _selectedFagerTime.format(context).replaceArabicNumbers(),
+          setting.fager.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
         const SizedBox(height: 16),
@@ -910,7 +898,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          _selectedDuherTime.format(context).replaceArabicNumbers(),
+          setting.duher.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
         const SizedBox(height: 16),
@@ -934,7 +922,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          _selectedAserTime.format(context).replaceArabicNumbers(),
+          setting.aser.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
         const SizedBox(height: 16),
@@ -958,7 +946,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          _selectedMaghrepTime.format(context).replaceArabicNumbers(),
+          setting.magrep.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
         const SizedBox(height: 16),
@@ -982,7 +970,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          _selectedMaghrepTime.format(context).replaceArabicNumbers(),
+          setting.isha.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
         const SizedBox(height: 16),
@@ -1006,7 +994,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          _selectedSleepTime.format(context).replaceArabicNumbers(),
+          setting.sleep.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
         const SizedBox(height: 16),
@@ -1027,8 +1015,7 @@ class _SettingWidgetState extends State<SettingWidget> {
 
   bool _ifNotNull(TimeOfDay? time) {
     print('ifNotNull $time');
-    if(time == null)
-      return false;
-return true;
+    if (time == null) return false;
+    return true;
   }
 }
