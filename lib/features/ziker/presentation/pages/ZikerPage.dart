@@ -53,7 +53,6 @@ class ZikerPage extends StatelessWidget {
       leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            print('on pressed back');
             Navigator.pop(context);
           }));
 

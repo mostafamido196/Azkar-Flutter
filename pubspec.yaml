@@ -32,10 +32,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/reload.png
     - assets/images/ic_menu.svg
     - assets/images/baseline_error_24_white.svg
     - assets/images/baseline_settings_24.svg
-    - assets/images/reload.png
+    - assets/images/ic_baseline_check_circle_24.svg
+
   fonts:
     - family: typesetting
       fonts:

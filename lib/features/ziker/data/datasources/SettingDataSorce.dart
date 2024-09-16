@@ -24,10 +24,8 @@ class SettingDataSourceImpl implements SettingDataSource {
   @override
   Future<SettingResponse> getOldSetting() async {
     String? jsonString = sharedPreferences.getString(CACHED_SETTING);
-    print('data source get setting: $jsonString');
 
     if (jsonString != null) {
-      print('data source if (jsonString != null) { setting: $jsonString');
       Map<String, dynamic> jsonMap = jsonDecode(jsonString);
       SettingResponse setting = SettingResponse.fromJson(jsonMap);
 
@@ -40,13 +38,11 @@ class SettingDataSourceImpl implements SettingDataSource {
 
   @override
   Future<Either<Failure, Unit>> updateSetting(SettingResponse settingModel) async {
-  print('data source update setting: $settingModel');
     try {
       final jsonString = jsonEncode(settingModel.toJson());
       await sharedPreferences.setString(CACHED_SETTING, jsonString);
       return Right(unit);
     } catch (e) {
-      print('data source catch e: ${e.toString()}');
       return Left(UnKnownFailure(message: e.toString()));
     }
   }

@@ -39,7 +39,6 @@ class _SettingScreenState extends State<SettingScreen> {
   bool isInitialedSize = true; // to initialize setting first time only
 
   void _updateSetting(Setting newSetting) {
-    print('_updateSetting: ${setting.walkUp.toString()}');
     setState(() {
       setting = newSetting;
     });
@@ -106,7 +105,6 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void _done() async {
-    print('done: setting: ${setting}');
     BlocProvider.of<SettingBloc>(context)
         .add(UpdateSettingEvent(setting: setting));
 
@@ -123,7 +121,6 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void _initialSetting(Setting setting) {
-  print('data come from bloc setting: $setting');
     if (isInitialedSize) {
       isInitialedSize = false;
       this.setting = setting;

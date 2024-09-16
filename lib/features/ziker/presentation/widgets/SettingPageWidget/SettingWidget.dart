@@ -195,7 +195,6 @@ class _SettingWidgetState extends State<SettingWidget> {
                 child: GestureDetector(
                     onTap: () {
                       // Handle the tap event here
-                      print('Image tapped!');
                     },
                     child: Row(
                       children: [
@@ -1014,7 +1013,6 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   bool _ifNotNull(TimeOfDay? time) {
-    print('ifNotNull $time');
     if (time == null) return false;
     return true;
   }

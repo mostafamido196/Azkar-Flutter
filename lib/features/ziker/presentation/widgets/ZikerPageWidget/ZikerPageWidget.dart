@@ -6,7 +6,9 @@ import 'package:azkar/features/ziker/presentation/pages/ZikerPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/widgets/CustomPopUp.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
+import '../../pages/MainPage.dart';
 
 class ZikerPageWidget extends StatefulWidget {
   final Ziker azkar;
@@ -21,7 +23,21 @@ class ZikerPageWidget extends StatefulWidget {
 }
 
 class _ZikerPageWidgetState extends State<ZikerPageWidget> {
-  int currentPage = 0;
+  // late PageController _pageController;
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // _pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    // _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,43 +88,43 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
   }
 
   Widget _ViewPager() {
-    print('view pager mos');
     return Expanded(
-        child:GestureDetector(
-        onTap: _increaseCounter, // Click event
-    child:  Container(
-      width: double.infinity,
-      child: PageView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: widget.azkar.arr.length,
-        itemBuilder: (context, index) {
-          final myObject = widget.azkar.arr[index];
-          return Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  myObject.matn,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  myObject.isnad,
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-     ),
-          );
-        },
-        onPageChanged: (num) {
-          setState(() {
-            currentPage = num;
-            print('mos num $num');
-          });
-        },
-      ),
-    )));
+        child: GestureDetector(
+            onTap: _increaseCounter, // Click event
+            child: SizedBox(
+              width: double.infinity,
+              child: PageView.builder(
+                controller: _pageController,
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.azkar.arr.length,
+                itemBuilder: (context, index) {
+                  final myObject = widget.azkar.arr[index];
+                  return Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          myObject.matn,
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          myObject.isnad,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                onPageChanged: (num) {
+                  setState(() {
+                    _currentPage = num;
+                  });
+                },
+              ),
+            )));
   }
 
   Widget _BottomRow() {
@@ -131,10 +147,10 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
             height: 50,
             child: Center(
                 child: Text(
-                    '${currentPage + 1} من ${widget.azkar.arr.length}'
+                    '${_currentPage + 1} من ${widget.azkar.arr.length}'
                         .replaceArabicNumbers(),
                     style:
-                        TextStyle(fontSize: 18, color: AppColors.c4Actionbar))),
+                    TextStyle(fontSize: 18, color: AppColors.c4Actionbar))),
           ),
         ));
   }
@@ -149,19 +165,14 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
             alignment: Alignment.center,
             children: [
               SizedBox(
-                  width: double.infinity, // Full width
-                  height: double.infinity, // Full height
-                  child: CircularProgressIndicator(
-                    strokeWidth: 6,
-                    value: widget.azkar.arr[currentPage].state /
-                        widget.azkar.arr[currentPage].no_repeat,
-                    backgroundColor: Colors.grey[300],
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(AppColors.c4Actionbar),
-                  )),
+                width: double.infinity, // Full width
+                height: double.infinity, // Full height
+                child: _CircularProgress(),
+              ),
               // Centered text
               Text(
-                '${widget.azkar.arr[currentPage].state}'.replaceArabicNumbers(),
+                '${widget.azkar.arr[_currentPage].state}'
+                    .replaceArabicNumbers(),
                 style: TextStyle(
                     fontSize: 32,
                     color: Colors.black), // Adjust color for visibility
@@ -181,17 +192,65 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
           height: 50,
           child: Center(
             child: Text(
-                '${widget.azkar.arr[currentPage].no_repeat.replaceArabicString()}',
-                style: TextStyle(fontSize: 18, color: AppColors.c4Actionbar)),
+                widget.azkar.arr[_currentPage].no_repeat.replaceArabicString(),
+                style: const TextStyle(
+                    fontSize: 18, color: AppColors.c4Actionbar)),
           ),
         ),
       ),
     );
   }
 
-  void _increaseCounter() {
-    setState(() {
-      widget.azkar.arr[currentPage].state += 1;
-    });
+  void _increaseCounter() async {
+    if (!_IsHadithFinished()) {
+      //sound
+      setState(() {
+        widget.azkar.arr[_currentPage].state += 1;
+      });
+    }
+    if (_IsHadithFinished() && !_IsLastHadith()) {
+      //vibrate
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else if (_IsHadithFinished() && _IsLastHadith()) {
+      // vibrate
+      _showCustomPopup();
+    }
+  }
+
+
+  void _showCustomPopup() {
+    showDialog(
+        context: context,
+        builder: (BuildContext dialogContext) {
+          return CustomPopupWidget(() {
+            Navigator.of(dialogContext).pop(); // Dismiss the dialog
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => MainPage()),
+                  (route) => false,
+            );
+          });
+  });}
+
+  bool _IsHadithFinished() {
+    return widget.azkar.arr[_currentPage].state ==
+        widget.azkar.arr[_currentPage].no_repeat;
+  }
+
+  bool _IsLastHadith() {
+    return widget.azkar.arr.length == (_currentPage + 1);
+  }
+
+  Widget _CircularProgress() {
+    return CircularProgressIndicator(
+      strokeWidth: 6,
+      value: widget.azkar.arr[_currentPage].state /
+          widget.azkar.arr[_currentPage].no_repeat,
+      backgroundColor: Colors.grey[300],
+      valueColor: AlwaysStoppedAnimation<Color>(AppColors.c4Actionbar),
+    );
   }
 }
