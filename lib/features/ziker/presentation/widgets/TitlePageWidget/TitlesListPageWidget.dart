@@ -2,7 +2,7 @@ import 'package:azkar/core/FontSize.dart';
 import 'package:azkar/core/Utils.dart';
 import 'package:azkar/core/colors.dart';
 import 'package:azkar/features/ziker/domain/entities/Ziker.dart';
-import 'package:azkar/features/ziker/presentation/pages/ZikerPage.dart';
+import 'package:azkar/features/ziker/presentation/pages/ZikerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -58,7 +58,7 @@ class ZikerPage extends StatelessWidget {
 
   Widget _buildBody() {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(top: 10,bottom: 10),
       child: BlocBuilder<AzkarBloc, AzkarState>(
         builder: (context, state) {
           if (state is LoadingAzkarState) {

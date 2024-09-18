@@ -1,10 +1,11 @@
 import 'package:azkar/core/colors.dart';
+import 'package:azkar/features/ziker/presentation/pages/AboutScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../bloc/azkar/setting/SettingBloc.dart';
-import '../../pages/SettingPage.dart';
+import '../../pages/SettingScreen.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({
@@ -103,7 +104,12 @@ class DrawerWidget extends StatelessWidget {
             );
             break;
           case 'عن التطبيق':
-            // Code block 2
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>  AboutScreen(),
+              ),
+            );
             break;
           default:
           // Default code block
