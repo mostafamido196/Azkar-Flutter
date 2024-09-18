@@ -116,6 +116,7 @@ class _SettingScreenState extends State<SettingScreen> {
         break;
       }
     }
+    pushNotification();
     //
     Navigator.pop(context);
   }
@@ -152,5 +153,9 @@ class _SettingScreenState extends State<SettingScreen> {
       case FontSize.Large:
         return 3;
     }
+  }
+
+  void pushNotification() {
+
   }
 }

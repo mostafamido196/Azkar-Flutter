@@ -25,6 +25,9 @@ dependencies:
   vibration: ^1.7.4
   audioplayers: ^6.1.0
 
+  # open url
+  url_launcher: ^6.3.0
+
   # notification
   flutter_local_notifications: ^17.2.2
 
@@ -44,9 +47,12 @@ flutter:
     - assets/images/baseline_settings_24.svg
     - assets/images/ic_baseline_check_circle_24.svg
     - assets/audio/light_button.mp3
+    - assets/images/facebook.svg
 
   fonts:
     - family: typesetting
       fonts:
         - asset: fonts/typesetting.ttf
+    - family: alfont
+      fonts:
         - asset: fonts/alfont_com_alfont_com_4_30.ttf
