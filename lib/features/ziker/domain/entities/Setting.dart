@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/FontSize.dart';
+import '../../../../core/utils/FontSize.dart';
 
 class Setting extends Equatable {
   FontSize fontSize;

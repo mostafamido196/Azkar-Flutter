@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:azkar/core/FontSize.dart';
+import 'package:azkar/core/utils/FontSize.dart';
 import 'package:azkar/core/error/failures.dart';
 import 'package:azkar/features/ziker/data/datasources/SettingDataSorce.dart';
 import 'package:azkar/features/ziker/domain/repositories/SettingRepository.dart';

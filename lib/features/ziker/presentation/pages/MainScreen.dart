@@ -1,12 +1,12 @@
 import 'dart:ffi';
 
-import 'package:azkar/core/FontSize.dart';
+import 'package:azkar/core/utils/FontSize.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:azkar/features/ziker/presentation/widgets/titlePageWidget/DrawerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../core/Utils.dart';
+import '../../../../core/utils/Utils.dart';
 import '../../../../core/colors.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../domain/entities/Setting.dart';

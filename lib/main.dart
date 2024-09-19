@@ -1,3 +1,4 @@
+import 'package:azkar/core/utils/notification_helper.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/azkar/AzkarTitlesBloc.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationHelper.init();
   await di.init();
   runApp(
     const MaterialApp(

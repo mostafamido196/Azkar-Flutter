@@ -1,4 +1,4 @@
-import '../features/ziker/domain/entities/Ziker.dart';
+import '../../features/ziker/domain/entities/Ziker.dart';
 import 'FontSize.dart';
 
 class Utils {

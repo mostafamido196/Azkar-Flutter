@@ -1,10 +1,11 @@
-import 'package:azkar/core/FontSize.dart';
+import 'package:azkar/core/utils/FontSize.dart';
+import 'package:azkar/core/utils/notification_helper.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:azkar/features/ziker/presentation/widgets/SettingPageWidget/SettingWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/Utils.dart';
+import '../../../../core/utils/Utils.dart';
 import '../../domain/entities/Setting.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -156,6 +157,6 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void pushNotification() {
-
+    NotificationHelper.scheduledNotification('title', 'body');
   }
 }

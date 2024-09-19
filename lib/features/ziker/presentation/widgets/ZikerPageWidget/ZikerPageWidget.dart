@@ -1,8 +1,8 @@
 import 'dart:ffi';
 import 'dart:math';
 
-import 'package:azkar/core/FontSize.dart';
-import 'package:azkar/core/Utils.dart';
+import 'package:azkar/core/utils/FontSize.dart';
+import 'package:azkar/core/utils/Utils.dart';
 import 'package:azkar/core/colors.dart';
 import 'package:azkar/features/ziker/domain/entities/Hadith.dart';
 import 'package:azkar/features/ziker/domain/entities/Ziker.dart';

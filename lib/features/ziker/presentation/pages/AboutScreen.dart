@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/FontSize.dart';
-import '../../../../core/Utils.dart';
+import '../../../../core/utils/FontSize.dart';
+import '../../../../core/utils/Utils.dart';
 import '../../../../core/colors.dart';
 import '../bloc/azkar/setting/SettingBloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';

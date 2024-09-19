@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../core/FontSize.dart';
-import '../../../../../core/Utils.dart';
+import '../../../../../core/utils/FontSize.dart';
+import '../../../../../core/utils/Utils.dart';
 import '../../../../../core/colors.dart';
 import '../../../../../core/widgets/loading_widget.dart';
 import '../../../domain/entities/Setting.dart';

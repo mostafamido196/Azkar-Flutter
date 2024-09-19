@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/FontSize.dart';
+import '../../../../core/utils/FontSize.dart';
 import '../../domain/entities/Setting.dart';
 
 class SettingResponse extends Setting {
