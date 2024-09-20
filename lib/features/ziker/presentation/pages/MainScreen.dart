@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MainPage> {
         child: Scaffold(
           appBar: _appBar(),
           body: _drawerAndBody(),
-        ));
+             ));
   }
 
   AppBar _appBar() => AppBar(

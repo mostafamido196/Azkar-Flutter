@@ -10,10 +10,14 @@ class Setting extends Equatable {
   bool noisy;
   bool vibrate;
   bool transfer;
-  bool isWalkUp;
   TimeOfDay walkUp;
+  bool isWalkUp;
   TimeOfDay sleep;
   bool isSleep;
+  TimeOfDay morning;
+  bool isMorning;
+  TimeOfDay evening;
+  bool isEvening;
   TimeOfDay fager;
   bool isFager;
   TimeOfDay duher;
@@ -34,6 +38,10 @@ class Setting extends Equatable {
     required this.isWalkUp,
     required this.sleep,
     required this.isSleep,
+    required this.morning,
+    required this.isMorning,
+    required this.evening,
+    required this.isEvening,
     required this.fager,
     required this.isFager,
     required this.duher,
@@ -56,6 +64,10 @@ class Setting extends Equatable {
         isWalkUp,
         sleep,
         isSleep,
+        morning,
+        isMorning,
+        evening,
+        isEvening,
         fager,
         isFager,
         duher,

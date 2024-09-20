@@ -12,21 +12,30 @@ class NotificationHelper {
     tz.initializeTimeZones();
   }
 
-  static scheduledNotification(String title, String body) async {
-    var androidDetail = const AndroidNotificationDetails(
-        'important_notification', 'my_channel',
-        importance: Importance.max, priority: Priority.high);
-    var iosDetail = const DarwinNotificationDetails();
-    var notificationDetail =
-        NotificationDetails(android: androidDetail, iOS: iosDetail);
+  static scheduledDailyNotification(
+      {required int id,required  String title,required  String body,required  DateTime selectedTime}) async {
+    // to make notification daily
+    if (selectedTime.isBefore(DateTime.now())) {
+      selectedTime = selectedTime.add(const Duration(days: 1));
+    }
+
+    // push notification
     await _notification.zonedSchedule(
         0,
         title,
         body,
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-        notificationDetail,
+        tz.TZDateTime.from(selectedTime, tz.local),
+        _notificationDetails(),
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle);
+  }
+
+  static NotificationDetails _notificationDetails() {
+    var androidDetail = const AndroidNotificationDetails(
+        'important_notification', 'my_channel',
+        importance: Importance.max, priority: Priority.high);
+    var iosDetail = const DarwinNotificationDetails();
+    return NotificationDetails(android: androidDetail, iOS: iosDetail);
   }
 }

@@ -2,6 +2,7 @@
 part of 'SettingBloc.dart';
 
 
+
 abstract class SettingEvent extends Equatable {
   const SettingEvent();
 

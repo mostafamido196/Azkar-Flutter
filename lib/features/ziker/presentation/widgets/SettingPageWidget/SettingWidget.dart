@@ -119,10 +119,14 @@ class _SettingWidgetState extends State<SettingWidget> {
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(children: <Widget>[
-          _titleSettingRow('إعدادات إشعارات النوم والاستيقاظ'),
+          _titleSettingRow('إعدادات إشعارات اليوم والليلة'),
           _walkUpNotifySettingRow(),
           _spaceBetween(),
           _sleepNotifySettingRow(),
+          _spaceBetween(),
+          _morningNotifySettingRow(),
+          _spaceBetween(),
+          _eveningNotifySettingRow(),
           _spaceBottom()
         ]));
   }
@@ -476,6 +480,44 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
+  Widget _morningNotifySettingRow() {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.only( right: 8, left: 8),
+      alignment: Alignment.centerRight,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(child: _tv('الصباح')),
+              _morningNotifySwitcher()
+            ],
+          ),
+          _pickerMorningRow()
+        ],
+      ),
+    );
+  }
+  Widget _eveningNotifySettingRow() {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.only( right: 8, left: 8),
+      alignment: Alignment.centerRight,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(child: _tv('المساء')),
+              _eveningNotifySwitcher()
+            ],
+          ),
+          _pickerEveningRow()
+        ],
+      ),
+    );
+  }
 
   Widget _tv(String str) {
     return Text(
@@ -568,8 +610,8 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _transferSwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.transfer,
         onChanged: (value) {
@@ -588,8 +630,8 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _vibrateSwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.vibrate,
         onChanged: (value) {
@@ -607,8 +649,8 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _noiseSwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.noisy,
         onChanged: (value) {
@@ -626,8 +668,8 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _walkUpNotifySwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.isWalkUp,
         onChanged: (value) {
@@ -641,10 +683,9 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
-
   Widget _fagrNotifySwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8, // Adjust the scale to make the Switch smaller
       child: Switch(
         value: setting.isFager,
         onChanged: (value) {
@@ -659,9 +700,11 @@ class _SettingWidgetState extends State<SettingWidget> {
     );
   }
 
+
+
   Widget _duherNotifySwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.isDuher,
         onChanged: (value) {
@@ -677,8 +720,8 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _aserNotifySwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.isAser,
         onChanged: (value) {
@@ -694,8 +737,8 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _magrepNotifySwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.isMagrep,
         onChanged: (value) {
@@ -711,8 +754,8 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _ishaNotifySwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.isIsha,
         onChanged: (value) {
@@ -728,13 +771,45 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _sleepNotifySwitcher() {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
+    return Transform.scale(
+      scale: 0.8,
       child: Switch(
         value: setting.isSleep,
         onChanged: (value) {
           setState(() {
             setting.isSleep = value;
+          });
+          widget.onSettingChanged(setting);
+        },
+        activeTrackColor: AppColors.switch_track_selector,
+        activeColor: AppColors.c4Actionbar,
+      ),
+    );
+  }
+  Widget _morningNotifySwitcher() {
+    return Transform.scale(
+      scale: 0.8,
+      child: Switch(
+        value: setting.isMorning,
+        onChanged: (value) {
+          setState(() {
+            setting.isMorning = value;
+          });
+          widget.onSettingChanged(setting);
+        },
+        activeTrackColor: AppColors.switch_track_selector,
+        activeColor: AppColors.c4Actionbar,
+      ),
+    );
+  }
+  Widget _eveningNotifySwitcher() {
+    return Transform.scale(
+      scale: 0.8,
+      child: Switch(
+        value: setting.isEvening,
+        onChanged: (value) {
+          setState(() {
+            setting.isEvening = value;
           });
           widget.onSettingChanged(setting);
         },
@@ -843,6 +918,30 @@ class _SettingWidgetState extends State<SettingWidget> {
       widget.onSettingChanged(setting);
     }
   }
+  Future<void> _selectMorningTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: setting.morning,
+    );
+    if (picked != null && picked != setting.morning) {
+      setState(() {
+        setting.morning = picked;
+      });
+      widget.onSettingChanged(setting);
+    }
+  }
+  Future<void> _selectEveningTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: setting.evening,
+    );
+    if (picked != null && picked != setting.evening) {
+      setState(() {
+        setting.evening = picked;
+      });
+      widget.onSettingChanged(setting);
+    }
+  }
 
   Widget _pickerWalkUpRow() {
     return Row(
@@ -852,7 +951,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           setting.walkUp.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
-        const SizedBox(height: 16),
         GestureDetector(
           onTap: () => _selectWalkUpTime(context),
           child: const Padding(
@@ -860,7 +958,7 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Icon(
               Icons.edit,
               size: 24,
-              color: Colors.black,
+              color: AppColors.c4Actionbar,
             ),
           ),
         ),
@@ -876,7 +974,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           setting.fager.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
-        const SizedBox(height: 16),
         GestureDetector(
           onTap: () => _selectFagerTime(context),
           child: const Padding(
@@ -884,7 +981,7 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Icon(
               Icons.edit,
               size: 24,
-              color: Colors.black,
+              color: AppColors.c4Actionbar,
             ),
           ),
         ),
@@ -900,7 +997,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           setting.duher.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
-        const SizedBox(height: 16),
         GestureDetector(
           onTap: () => _selectDuherTime(context),
           child: const Padding(
@@ -908,7 +1004,7 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Icon(
               Icons.edit,
               size: 24,
-              color: Colors.black,
+              color: AppColors.c4Actionbar,
             ),
           ),
         ),
@@ -924,7 +1020,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           setting.aser.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
-        const SizedBox(height: 16),
         GestureDetector(
           onTap: () => _selectAserTime(context),
           child: const Padding(
@@ -932,7 +1027,7 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Icon(
               Icons.edit,
               size: 24,
-              color: Colors.black,
+              color: AppColors.c4Actionbar,
             ),
           ),
         ),
@@ -948,7 +1043,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           setting.magrep.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
-        const SizedBox(height: 16),
         GestureDetector(
           onTap: () => _selectMagrapTime(context),
           child: const Padding(
@@ -956,7 +1050,7 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Icon(
               Icons.edit,
               size: 24,
-              color: Colors.black,
+              color: AppColors.c4Actionbar,
             ),
           ),
         ),
@@ -972,7 +1066,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           setting.isha.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
-        const SizedBox(height: 16),
         GestureDetector(
           onTap: () => _selectIshaTime(context),
           child: const Padding(
@@ -980,7 +1073,7 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Icon(
               Icons.edit,
               size: 24,
-              color: Colors.black,
+              color: AppColors.c4Actionbar,
             ),
           ),
         ),
@@ -996,7 +1089,6 @@ class _SettingWidgetState extends State<SettingWidget> {
           setting.sleep.format(context).replaceArabicNumbers(),
           style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
         ),
-        const SizedBox(height: 16),
         GestureDetector(
           onTap: () => _selectSleepTime(context),
           child: const Padding(
@@ -1004,7 +1096,51 @@ class _SettingWidgetState extends State<SettingWidget> {
             child: Icon(
               Icons.edit,
               size: 24,
-              color: Colors.black,
+              color: AppColors.c4Actionbar,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  Widget _pickerMorningRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          setting.morning.format(context).replaceArabicNumbers(),
+          style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
+        ),
+        GestureDetector(
+          onTap: () => _selectMorningTime(context),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: Icon(
+              Icons.edit,
+              size: 24,
+              color: AppColors.c4Actionbar,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  Widget _pickerEveningRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          setting.evening.format(context).replaceArabicNumbers(),
+          style: TextStyle(fontSize: Utils().fontSize(_fontSizeType)),
+        ),
+        GestureDetector(
+          onTap: () => _selectEveningTime(context),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: Icon(
+              Icons.edit,
+              size: 24,
+              color: AppColors.c4Actionbar,
             ),
           ),
         ),

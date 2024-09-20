@@ -41,17 +41,17 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
   SettingState _eitherDoneMessageOrErrorState(
       Either<Failure, Unit> either, String message) {
     return either.fold(
-      (failure) => ErrorSettingState(
+          (failure) => ErrorSettingState(
         message: _mapFailureToMessage(failure),
       ),
-      (_) => MessageUpdateSettingState(message: message),
+          (_) => MessageUpdateSettingState(message: message),
     );
   }
 
   SettingState _mapFailureOrSettingToState(Either<Failure, Setting> either) {
     return either.fold(
-      (failure) => ErrorSettingState(message: _mapFailureToMessage(failure)),
-      (result) => LoadedSettingState(
+          (failure) => ErrorSettingState(message: _mapFailureToMessage(failure)),
+          (result) => LoadedSettingState(
         setting: result,
       ),
     );

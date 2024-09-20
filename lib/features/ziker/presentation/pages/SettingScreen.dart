@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/Utils.dart';
 import '../../domain/entities/Setting.dart';
 
+
 class SettingScreen extends StatefulWidget {
   SettingScreen({Key? key}) : super(key: key);
 
@@ -21,19 +22,23 @@ class _SettingScreenState extends State<SettingScreen> {
     noisy: true,
     vibrate: true,
     transfer: true,
-    walkUp: TimeOfDay.now(),
+    walkUp: TimeOfDay(hour: 6, minute: 30),
     isWalkUp: true,
-    sleep: TimeOfDay.now(),
+    sleep: TimeOfDay(hour: 22, minute: 0),
     isSleep: true,
-    fager: TimeOfDay.now(),
+    morning: TimeOfDay(hour: 9, minute: 0),
+    isMorning: true,
+    evening: TimeOfDay(hour: 17, minute: 0),
+    isEvening: true,
+    fager: TimeOfDay(hour: 4, minute: 30),
     isFager: true,
-    duher: TimeOfDay.now(),
+    duher: TimeOfDay(hour: 12, minute: 30),
     isDuher: true,
-    aser: TimeOfDay.now(),
+    aser: TimeOfDay(hour: 16, minute: 0),
     isAser: true,
-    magrep: TimeOfDay.now(),
+    magrep: TimeOfDay(hour: 18, minute: 10),
     isMagrep: true,
-    isha: TimeOfDay.now(),
+    isha: TimeOfDay(hour: 19, minute: 0),
     isIsha: true,
   );
   int _fontSizeType = 2;
@@ -53,7 +58,7 @@ class _SettingScreenState extends State<SettingScreen> {
           resizeToAvoidBottomInset: false,
           appBar: _buildAppbar(context),
           body: _buildBody(),
-        ));
+        ) );
   }
 
   AppBar _buildAppbar(BuildContext context) {
@@ -101,12 +106,11 @@ class _SettingScreenState extends State<SettingScreen> {
     return SettingWidget(
         setting: setting,
         onSettingChanged: _updateSetting,
-        pageFontSize: _fontSizeType
-    );
+        pageFontSize: _fontSizeType);
   }
 
   void _done() async {
-    BlocProvider.of<SettingBloc>(context)
+    BlocProvider.of<SettingBloc>(context)//.updateSetting(setting);
         .add(UpdateSettingEvent(setting: setting));
 
     //when the updateEvent is done will start getSettingEvent
@@ -157,6 +161,37 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void pushNotification() {
-    NotificationHelper.scheduledNotification('title', 'body');
+    DateTime now = DateTime.now();
+    _setTimeNotification(id: 1, time: setting.walkUp, turnOn: setting.isWalkUp,now:now);
+    _setTimeNotification(id: 2, time: setting.sleep, turnOn: setting.isSleep,now:now);
+    _setTimeNotification(id: 3, time: setting.morning, turnOn: setting.isMorning,now:now);
+    _setTimeNotification(id: 4, time: setting.evening, turnOn: setting.isEvening,now:now);
+    _setTimeNotification(id: 5, time: setting.fager, turnOn: setting.isFager,now:now);
+    _setTimeNotification(id: 6, time: setting.duher, turnOn: setting.isDuher,now:now);
+    _setTimeNotification(id: 7, time: setting.aser, turnOn: setting.isAser,now:now);
+    _setTimeNotification(id: 8, time: setting.magrep, turnOn: setting.isMorning,now:now);
+    _setTimeNotification(id: 9, time: setting.isha, turnOn: setting.isIsha,now:now);
+  }
+
+  void _setTimeNotification({required int id, required TimeOfDay time, required bool turnOn,required now}) {
+    if (!turnOn) return;
+    NotificationHelper.scheduledDailyNotification(id: id, title: "صحيح الأذكار", body: _body(id:id), selectedTime: _selectedTime(time,now));
+  }
+
+  DateTime _selectedTime(TimeOfDay time,DateTime now) {
+    return DateTime(now.year, now.month, now.day, time.hour, time.minute);
+  }
+
+  String _body({required int id}) {
+    if(id == 1)       return "أذكار الإستيقاظ";
+    else if( id == 2) return 'أذكار النوم';
+    else if( id == 3) return 'أذكار الصباح';
+    else if( id == 4) return 'أذكار المساء';
+    else if( id == 5) return 'أذكار دبر صلاة الفجر';
+    else if( id == 6) return 'أذكار دبر صلاة الظهر';
+    else if( id == 7) return 'أذكار دبر صلاة العصر';
+    else if( id == 8) return 'أذكار دبر صلاة المغرب';
+    else if( id == 9) return 'أذكار دبر صلاة العشاء';
+    else return '';
   }
 }

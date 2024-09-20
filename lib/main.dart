@@ -32,8 +32,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (_) =>
-                  di.sl<AzkarBloc>()..add(GetAllAzkarTitlesEvent())),
+              create: (_) => di.sl<AzkarBloc>()..add(GetAllAzkarTitlesEvent())),
           BlocProvider(
               create: (_) => di.sl<SettingBloc>()..add(GetOldSettingEvent())),
         ],
