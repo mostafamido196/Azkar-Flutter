@@ -9,27 +9,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   equatable: ^2.0.0
-  # Local cache
   shared_preferences: ^2.1.1
-  # Functional programming things
   dartz: ^0.10.1
-  # Service locator
   get_it: ^7.6.0
-  # Bloc for state management
   flutter_bloc: ^8.1.2
   cupertino_icons: ^1.0.2
-
-  # audio and sound
   vibration: ^1.7.4
   audioplayers: ^6.1.0
-
-  # open url
   url_launcher: ^6.3.0
+  flutter_local_notifications: ^17.2.3
+  http: ^0.13.3
+  connectivity_plus: ^3.0.5
+  fluttertoast: ^8.2.1
+  location: ^4.4.0
+  geocoding: ^2.0.0
 
-  # notification
-  flutter_local_notifications: ^17.2.2
 
 dev_dependencies:
   flutter_test:
@@ -37,6 +32,11 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_svg: ^2.0.4
 
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/ic_launcher.xml"
 
 flutter:
   uses-material-design: true
@@ -48,6 +48,8 @@ flutter:
     - assets/images/ic_baseline_check_circle_24.svg
     - assets/audio/light_button.mp3
     - assets/images/facebook.svg
+    - assets/images/ic_launcher.xml
+    - assets/images/ic_launcher.png
 
   fonts:
     - family: typesetting

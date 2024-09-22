@@ -1,13 +1,17 @@
+import 'package:azkar/features/ziker/domain/entities/PrayerTime.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../../core/utils/FontSize.dart';
 import '../../../../../core/utils/Utils.dart';
 import '../../../../../core/colors.dart';
-import '../../../../../core/widgets/loading_widget.dart';
+import '../../../../../core/utils/location_helper.dart';
 import '../../../domain/entities/Setting.dart';
+import '../../bloc/PrayerTime/PrayerTimeCubit.dart';
+import '../../bloc/PrayerTime/PrayerTimeState.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
 
 class SettingWidget extends StatefulWidget {
@@ -55,20 +59,20 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   Widget _settingWidget(BuildContext context) {
-    return  Container(
+    return Container(
         color: AppColors.c2Read,
         margin: const EdgeInsets.only(top: 6),
         child: SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 20, right: 6, left: 6),
-      child: Column(
-        children: <Widget>[
-          _fontSetting(context),
-          _counterSetting(context),
-          _notifySleepAndWolkUpSetting(context),
-          _notifyPraysSetting(context),
-        ],
-      ),
-    ));
+          padding: const EdgeInsets.only(bottom: 20, right: 6, left: 6),
+          child: Column(
+            children: <Widget>[
+              _fontSetting(context),
+              _counterSetting(context),
+              _notifySleepAndWolkUpSetting(context),
+              _notifyPraysSetting(context),
+            ],
+          ),
+        ));
   }
 
   void _handleRadioValueChange(int? value) {
@@ -131,7 +135,47 @@ class _SettingWidgetState extends State<SettingWidget> {
         ]));
   }
 
+  PrayerTime? _cachedPrayerTimes;
+
   Widget _notifyPraysSetting(BuildContext context) {
+    return BlocBuilder<PrayerTimesCubit, PrayerTimesState>(
+        builder: (context, state) {
+      print('notification prays setting $state');
+      if (state is PrayerTimesLoading) {
+        return _makeProgress();
+      } else if (state is PrayerTimesSuccess) {
+        final prayerTimes = state.data;
+        // Only call setState if the prayer times have changed
+        if (_cachedPrayerTimes == null || _cachedPrayerTimes != prayerTimes) {
+          _cachedPrayerTimes = prayerTimes;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _setStatePrayerTimes(prayerTimes);
+          });
+        }
+      } else if (state is PrayerTimesError) {
+        // Show toast when there is an error
+        print('error: ${state.message}');
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          showToast(state.message); // Call the showToast function
+        });
+      }
+      return _notifyPraysSettingContent(context);
+    });
+  }
+
+  void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        // You can change the position if needed
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+  }
+
+  Widget _notifyPraysSettingContent(BuildContext context) {
     return Container(
         margin: const EdgeInsets.only(top: 8),
         width: double.infinity,
@@ -151,6 +195,17 @@ class _SettingWidgetState extends State<SettingWidget> {
           _ishaaNotifySettingRow(),
           _spaceBottom(),
         ]));
+  }
+
+  void _setStatePrayerTimes(PrayerTime prays) {
+    print('_setStatePrayerTimes');
+    setState(() {
+      setting.fager = prays.fajr;
+      setting.duher = prays.dhuhr;
+      setting.aser = prays.asr;
+      setting.magrep = prays.maghrib;
+      setting.isha = prays.isha;
+    });
   }
 
   Widget _titleSettingRow(String title) {
@@ -198,7 +253,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                 padding: const EdgeInsets.all(4.0),
                 child: GestureDetector(
                     onTap: () {
-                      // Handle the tap event here
+                      fetchPrayerTimes(context);
                     },
                     child: Row(
                       children: [
@@ -222,6 +277,19 @@ class _SettingWidgetState extends State<SettingWidget> {
                     )))
           ],
         ));
+  }
+  void fetchPrayerTimes(BuildContext context) async {
+    print('Fetching prayer times');
+
+    // Get current location
+    final locationData = await LocationUtils.getCurrentCityAndCountry();
+
+    // Use the location data with default values if null
+    final city = locationData['city'] ?? 'Cairo';
+    final country = locationData['country'] ?? 'Egypt';
+
+    // Fetch prayer times using the obtained city and country
+    context.read<PrayerTimesCubit>().fetchPrayerTimes(city, country);
   }
 
   Widget _radioButton(BuildContext context, int index) {
@@ -297,7 +365,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _transferSettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -312,7 +380,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _vibrateSettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -328,7 +396,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _noiseSettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -344,7 +412,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _walkUpNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -364,7 +432,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _fagrNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -384,7 +452,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _duhrNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -404,7 +472,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _aserNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -424,7 +492,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _magrepNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -444,7 +512,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _ishaaNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -464,7 +532,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _sleepNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -480,10 +548,11 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
+
   Widget _morningNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -499,10 +568,11 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
+
   Widget _eveningNotifySettingRow() {
     return Container(
       color: AppColors.white,
-      padding: const EdgeInsets.only( right: 8, left: 8),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       alignment: Alignment.centerRight,
       child: Column(
         children: [
@@ -605,8 +675,9 @@ class _SettingWidgetState extends State<SettingWidget> {
         return 3;
       case FontSize.Median:
         return 2;
+      case FontSize.Small:
+        return 1;
     }
-    return 1;
   }
 
   Widget _transferSwitcher() {
@@ -683,6 +754,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
+
   Widget _fagrNotifySwitcher() {
     return Transform.scale(
       scale: 0.8, // Adjust the scale to make the Switch smaller
@@ -699,8 +771,6 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
-
-
 
   Widget _duherNotifySwitcher() {
     return Transform.scale(
@@ -786,6 +856,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
+
   Widget _morningNotifySwitcher() {
     return Transform.scale(
       scale: 0.8,
@@ -802,6 +873,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       ),
     );
   }
+
   Widget _eveningNotifySwitcher() {
     return Transform.scale(
       scale: 0.8,
@@ -918,6 +990,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       widget.onSettingChanged(setting);
     }
   }
+
   Future<void> _selectMorningTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -930,6 +1003,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       widget.onSettingChanged(setting);
     }
   }
+
   Future<void> _selectEveningTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -1103,6 +1177,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       ],
     );
   }
+
   Widget _pickerMorningRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1125,6 +1200,7 @@ class _SettingWidgetState extends State<SettingWidget> {
       ],
     );
   }
+
   Widget _pickerEveningRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1148,8 +1224,25 @@ class _SettingWidgetState extends State<SettingWidget> {
     );
   }
 
-  bool _ifNotNull(TimeOfDay? time) {
-    if (time == null) return false;
-    return true;
+
+
+  Widget _makeProgress() {
+    return Center(
+      child: Container(
+        height: 520,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          // Background color for the progress indicator
+          borderRadius: BorderRadius.circular(30), // Rounded corners (optional)
+        ),
+        child: Center(
+          child: SizedBox(
+            height: 48, // Standard height for the CircularProgressIndicator
+            width: 48, // Standard width for the CircularProgressIndicator
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    );
   }
 }
