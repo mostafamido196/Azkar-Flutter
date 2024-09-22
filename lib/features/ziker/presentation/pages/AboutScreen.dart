@@ -36,8 +36,7 @@ class AboutScreen extends StatelessWidget {
           if (state is LoadedSettingState) {
             return Text(
               'عن البرنامج',
-              style:
-                  TextStyle(fontSize: Utils().fontSize(state.setting.fontSize)),
+              style: TextStyle(fontSize: Utils().fontSize(state.setting.fontSize)),
             );
           }
 
@@ -61,11 +60,11 @@ class AboutScreen extends StatelessWidget {
     return Container(
       color: AppColors.c2Read,
       padding: EdgeInsets.only(left: 6.0, right: 6, top: 16, bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Row(
+      child: SingleChildScrollView( // Add SingleChildScrollView here
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: Column(
@@ -81,13 +80,13 @@ class AboutScreen extends StatelessWidget {
                       SizedBox(height: 10), // Space between text
                       Center(
                           child: Text(
-                        'الشيخ الدكتور / ابو وسام وليد الرفاعي',
-                        style: TextStyle(
-                            fontFamily: 'alfont',
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.c4Actionbar,
-                            fontSize: fontSize * 2),
-                      )),
+                            'الشيخ الدكتور / ابو وسام وليد الرفاعي',
+                            style: TextStyle(
+                                fontFamily: 'alfont',
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.c4Actionbar,
+                                fontSize: fontSize * 2),
+                          )),
                       SizedBox(height: 10), // Space between text
                       Text(
                         "كما نرحب بالاقتراحات والملاحظات عبر نموذج التواصل بالموقع.\n" +
@@ -120,8 +119,8 @@ class AboutScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

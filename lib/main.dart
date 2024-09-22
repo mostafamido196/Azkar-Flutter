@@ -12,6 +12,7 @@ import 'injection_container.dart' as di;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationHelper.init();
+  NotificationHelper.firstTimeOnly();
   await di.init();
   runApp(
     const MaterialApp(
