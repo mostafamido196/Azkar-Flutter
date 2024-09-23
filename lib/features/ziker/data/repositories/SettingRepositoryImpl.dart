@@ -21,6 +21,7 @@ class SettingRepositoryImpl implements SettingRepository {
       final localPosts = await settingDataSource.getOldSetting();
       return Right(localPosts as SettingResponse);
     } on EmptyCacheException {
+      print('repo e: EmptyCacheFailure');
       return Left(EmptyCacheFailure());
     }
   }
@@ -54,6 +55,7 @@ class SettingRepositoryImpl implements SettingRepository {
       ));
       return Right(unit);
     } catch (e) {
+      print('repo e: ${e.toString()}');
       return Left(UnKnownFailure(message: e.toString()));
     }
   }

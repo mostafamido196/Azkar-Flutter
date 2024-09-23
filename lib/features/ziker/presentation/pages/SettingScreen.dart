@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/utils/Utils.dart';
+import '../../../../injection_container.dart';
 import '../../domain/entities/Setting.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -45,6 +46,8 @@ class _SettingScreenState extends State<SettingScreen> {
   int _fontSizeType = 2;
   bool isInitialedSize = true; // to initialize setting first time only
 
+
+
   void _updateSetting(Setting newSetting) {
     setState(() {
       setting = newSetting;
@@ -57,11 +60,11 @@ class _SettingScreenState extends State<SettingScreen> {
         create: (_) => GetIt.instance<PrayerTimesCubit>(),
         child: Directionality(
             textDirection: TextDirection.rtl,
-            child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              appBar: _buildAppbar(context),
-              body: _buildBody(),
-            )));
+            child:  Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  appBar: _buildAppbar(context),
+                  body: _buildBody(),
+                )));
   }
 
   AppBar _buildAppbar(BuildContext context) {
@@ -74,6 +77,7 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
       title: BlocBuilder<SettingBloc, SettingState>(
         builder: (context, state) {
+          print('settingstate : ${state}');
           if (state is LoadingSettingState) {
             // return const Text('الإعدادات');
           } else if (state is LoadedSettingState) {
@@ -162,5 +166,4 @@ class _SettingScreenState extends State<SettingScreen> {
         return 3;
     }
   }
-
 }

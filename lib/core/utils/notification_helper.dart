@@ -5,7 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
+import '../../features/ziker/domain/entities/PrayerTime.dart';
+import '../../features/ziker/domain/usecases/GetPrayerTimesUsecase.dart';
+import '../../features/ziker/domain/usecases/SetNewSettingUsecase.dart';
+import '../../injection_container.dart';
 import 'FontSize.dart';
+import 'location_helper.dart';
 
 class NotificationHelper {
   static final _notification = FlutterLocalNotificationsPlugin();
@@ -107,35 +112,58 @@ class NotificationHelper {
   }
 
   static void firstTimeOnly() async {
+    print('firstTimeOnly');
     final prefs = await SharedPreferences.getInstance();
     final bool isFirstRun = prefs.getBool('isFirstRun') ?? true;
     if (isFirstRun) {
-      Setting setting = Setting(
-        fontSize: FontSize.Median,
-        noisy: true,
-        vibrate: true,
-        transfer: true,
-        walkUp: TimeOfDay(hour: 6, minute: 30),
-        isWalkUp: true,
-        sleep: TimeOfDay(hour: 22, minute: 0),
-        isSleep: true,
-        morning: TimeOfDay(hour: 9, minute: 0),
-        isMorning: true,
-        evening: TimeOfDay(hour: 17, minute: 0),
-        isEvening: true,
-        fager: TimeOfDay(hour: 4, minute: 30),
-        isFager: true,
-        duher: TimeOfDay(hour: 12, minute: 30),
-        isDuher: true,
-        aser: TimeOfDay(hour: 16, minute: 0),
-        isAser: true,
-        magrep: TimeOfDay(hour: 18, minute: 10),
-        isMagrep: true,
-        isha: TimeOfDay(hour: 19, minute: 0),
-        isIsha: true,
-      );
-      pushNotification(setting);
-      await prefs.setBool('isFirstRun', false);
+      print('is first time run');
+      try {
+        final locationData = await LocationUtils.getCurrentCityAndCountry();
+        final city = locationData['city'] ?? 'Cairo';
+        final country = locationData['country'] ?? 'Egypt';
+
+        // 1. Fetch Prayer Times from Usecase
+        final prayerTimes = await sl<GetPrayerTimesUsecase>().call(city, country);
+        if (prayerTimes.isError) return;
+        final Setting setting =
+        _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
+        // 2. Save it to Settings using UpdateSettingUsecase
+        await sl<UpdateSettingUsecase>().call(setting);
+
+        pushNotification(setting);
+        await prefs.setBool('isFirstRun', false);
+        print('every thisg is will');
+      } catch (e) {
+        print("Error occurred while initializing settings: $e");
+        // Handle any errors such as network issues or data parsing problems
+      }
     }
   }
+  static Setting _getSettingWithNewPrayersTime(PrayerTime prayerTimes) {
+    return Setting(
+      fontSize: FontSize.Median,
+      noisy: true,
+      vibrate: true,
+      transfer: true,
+      walkUp: TimeOfDay(hour: 6, minute: 30),
+      isWalkUp: true,
+      sleep: TimeOfDay(hour: 22, minute: 0),
+      isSleep: true,
+      morning: TimeOfDay(hour: 9, minute: 0),
+      isMorning: true,
+      evening: TimeOfDay(hour: 17, minute: 0),
+      isEvening: true,
+      fager: prayerTimes.fajr,
+      isFager: true,
+      duher: prayerTimes.dhuhr,
+      isDuher: true,
+      aser: prayerTimes.asr,
+      isAser: true,
+      magrep: prayerTimes.maghrib,
+      isMagrep: true,
+      isha: prayerTimes.isha,
+      isIsha: true,
+    );
+  }
+
 }

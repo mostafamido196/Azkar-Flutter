@@ -96,18 +96,13 @@ class DrawerWidget extends StatelessWidget {
         }
         switch (title) {
           case 'الإعدادات':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) =>  SettingScreen(),
-              ),
-            );
+            _gotoSettingPage(context);
             break;
           case 'عن التطبيق':
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) =>  AboutScreen(),
+                builder: (_) => AboutScreen(),
               ),
             );
             break;
@@ -115,6 +110,15 @@ class DrawerWidget extends StatelessWidget {
           // Default code block
         }
       },
+    );
+  }
+
+  void _gotoSettingPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SettingScreen(),
+      ),
     );
   }
 }

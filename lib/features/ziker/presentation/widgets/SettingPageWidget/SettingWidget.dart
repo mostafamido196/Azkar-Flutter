@@ -140,7 +140,6 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _notifyPraysSetting(BuildContext context) {
     return BlocBuilder<PrayerTimesCubit, PrayerTimesState>(
         builder: (context, state) {
-      print('notification prays setting $state');
       if (state is PrayerTimesLoading) {
         return _makeProgress();
       } else if (state is PrayerTimesSuccess) {
@@ -280,16 +279,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
   void fetchPrayerTimes(BuildContext context) async {
     print('Fetching prayer times');
-
-    // Get current location
-    final locationData = await LocationUtils.getCurrentCityAndCountry();
-
-    // Use the location data with default values if null
-    final city = locationData['city'] ?? 'Cairo';
-    final country = locationData['country'] ?? 'Egypt';
-
-    // Fetch prayer times using the obtained city and country
-    context.read<PrayerTimesCubit>().fetchPrayerTimes(city, country);
+    context.read<PrayerTimesCubit>().fetchPrayerTimesUsingLocation();
   }
 
   Widget _radioButton(BuildContext context, int index) {

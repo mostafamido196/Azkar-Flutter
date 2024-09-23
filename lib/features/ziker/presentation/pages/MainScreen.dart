@@ -1,15 +1,24 @@
 import 'dart:ffi';
 
 import 'package:azkar/core/utils/FontSize.dart';
+import 'package:azkar/core/utils/Status.dart';
+import 'package:azkar/core/utils/notification_helper.dart';
+import 'package:azkar/features/ziker/domain/entities/PrayerTime.dart';
+import 'package:azkar/features/ziker/domain/usecases/GetPrayerTimesUsecase.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
 import 'package:azkar/features/ziker/presentation/widgets/titlePageWidget/DrawerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import '../../../../core/utils/Utils.dart';
 import '../../../../core/colors.dart';
+import '../../../../core/utils/location_helper.dart';
 import '../../../../core/widgets/loading_widget.dart';
+import '../../../../injection_container.dart';
 import '../../domain/entities/Setting.dart';
+import '../../domain/usecases/SetNewSettingUsecase.dart';
+import '../bloc/PrayerTime/PrayerTimeCubit.dart';
 import '../bloc/azkar/azkar/AzkarTitlesBloc.dart';
 import '../widgets/titlePageWidget/TitlesListPageWidget.dart';
 import '../widgets/titlePageWidget/message_display_widget.dart';
@@ -25,13 +34,19 @@ class _MyHomePageState extends State<MainPage> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
   @override
+  void initState() {
+    NotificationHelper.firstTimeOnly();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
           appBar: _appBar(),
           body: _drawerAndBody(),
-             ));
+        ));
   }
 
   AppBar _appBar() => AppBar(
@@ -50,8 +65,7 @@ class _MyHomePageState extends State<MainPage> {
 
                 return Text(
                   'صحيح الأذكار',
-                  style: TextStyle(
-                      fontSize: Utils().fontSize(FontSize.Median)),
+                  style: TextStyle(fontSize: Utils().fontSize(FontSize.Median)),
                 );
               },
             );
@@ -96,4 +110,7 @@ class _MyHomePageState extends State<MainPage> {
       ),
     );
   }
+
+
+
 }
