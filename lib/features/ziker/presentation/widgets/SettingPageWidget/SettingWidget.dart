@@ -21,9 +21,9 @@ class SettingWidget extends StatefulWidget {
 
   SettingWidget(
       {required this.setting,
-      required this.onSettingChanged,
-      required this.pageFontSize,
-      Key? key})
+        required this.onSettingChanged,
+        required this.pageFontSize,
+        Key? key})
       : super(key: key);
 
   @override
@@ -140,38 +140,38 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget _notifyPraysSetting(BuildContext context) {
     return BlocBuilder<PrayerTimesCubit, PrayerTimesState>(
         builder: (context, state) {
-      if (state is PrayerTimesLoading) {
-        return _makeProgress();
-      } else if (state is PrayerTimesSuccess) {
-        final prayerTimes = state.data;
-        // Only call setState if the prayer times have changed
-        if (_cachedPrayerTimes == null || _cachedPrayerTimes != prayerTimes) {
-          _cachedPrayerTimes = prayerTimes;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _setStatePrayerTimes(prayerTimes);
-          });
-        }
-      } else if (state is PrayerTimesError) {
-        // Show toast when there is an error
-        print('error: ${state.message}');
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showToast(state.message); // Call the showToast function
+          if (state is PrayerTimesLoading) {
+            return _makeProgress();
+          } else if (state is PrayerTimesSuccess) {
+            final prayerTimes = state.data;
+            // Only call setState if the prayer times have changed
+            if (_cachedPrayerTimes == null || _cachedPrayerTimes != prayerTimes) {
+              _cachedPrayerTimes = prayerTimes;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _setStatePrayerTimes(prayerTimes);
+              });
+            }
+          } else if (state is PrayerTimesError) {
+            // Show toast when there is an error
+            print('error: ${state.message}');
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              showToast(state.message); // Call the showToast function
+            });
+          }
+          return _notifyPraysSettingContent(context);
         });
-      }
-      return _notifyPraysSettingContent(context);
-    });
   }
 
   void showToast(String message) {
-      Fluttertoast.showToast(
+    Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        // You can change the position if needed
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Color(0xFFF0F4F7),
+        textColor: AppColors.c4Actionbar,
+        fontSize: 16.0
+    );
   }
 
   Widget _notifyPraysSettingContent(BuildContext context) {

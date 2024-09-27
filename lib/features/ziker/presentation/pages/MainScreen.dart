@@ -14,6 +14,7 @@ import 'package:get_it/get_it.dart';
 import '../../../../core/utils/Utils.dart';
 import '../../../../core/colors.dart';
 import '../../../../core/utils/location_helper.dart';
+import '../../../../core/utils/notification_daily_test.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../../../injection_container.dart';
 import '../../domain/entities/Setting.dart';
@@ -22,20 +23,28 @@ import '../bloc/PrayerTime/PrayerTimeCubit.dart';
 import '../bloc/azkar/azkar/AzkarTitlesBloc.dart';
 import '../widgets/titlePageWidget/TitlesListPageWidget.dart';
 import '../widgets/titlePageWidget/message_display_widget.dart';
+import 'ZikerScreen.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final String? title;
+
+  MainPage({super.key, this.title});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(title);
 }
 
 class _MyHomePageState extends State<MainPage> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  final String? title;
+
+  _MyHomePageState(this.title);
 
   @override
   void initState() {
-    NotificationHelper.firstTimeOnly();
+    NotificationHelper.requestPermissions();
+    NotificationHelper.firstTimeOnly(context);
+    _handleOnClickNotificationEvent(title);
     super.initState();
   }
 
@@ -76,6 +85,8 @@ class _MyHomePageState extends State<MainPage> {
       leading: IconButton(
           icon: Icon(Icons.dehaze),
           onPressed: () {
+            // checkPendingNotificationRequests(
+            //     context, NotificationHelper.getNotificationInstance());
             if (_scaffoldKey.currentState!.isDrawerOpen == false) {
               _scaffoldKey.currentState!.openDrawer();
             } else {
@@ -111,6 +122,15 @@ class _MyHomePageState extends State<MainPage> {
     );
   }
 
-
-
+  void _handleOnClickNotificationEvent(String? title) {
+    if (title == null) return;
+    if (title == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ZikerPage(zikerTitle: title),
+        ),
+      );
+    }
+  }
 }

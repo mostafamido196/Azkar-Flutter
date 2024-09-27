@@ -16,14 +16,13 @@ class PrayerTimeRepositoryImpl implements PrayerTimeRepository {
   @override
   Future<NetworkState<PrayerTime>> getPrayerTimes(String city, String country) async {
 
-    if(!await checkInternetConnection())
+    if(!await checkInternetConnection()) {
       return NetworkState.error('تاكد من اتصال الانترنت');
-
+    }
     try {
       final response = await remoteDataSource.getPrayerTimes(city, country);
       return NetworkState.success(response.toDomain());
     } catch (e) {
-      print("e: ${e}");
       return NetworkState.error('مشكلة في السيرفر, اعد المحاولة لاحقا');
     }
   }

@@ -20,6 +20,7 @@ class PrayerTimesSuccess extends PrayerTimesState {
   final PrayerTime data;
 
   const PrayerTimesSuccess(this.data);
+
 }
 
 // State when there is an error

@@ -28,11 +28,9 @@ class SettingDataSourceImpl implements SettingDataSource {
     if (jsonString != null) {
       Map<String, dynamic> jsonMap = jsonDecode(jsonString);
       SettingResponse setting = SettingResponse.fromJson(jsonMap);
-      print('data source setting: $setting');
 
       return Future.value(setting);
     } else {
-      print('data source error EmptyCacheException');
       throw EmptyCacheException();
     }
   }
@@ -43,10 +41,8 @@ class SettingDataSourceImpl implements SettingDataSource {
     try {
       final jsonString = jsonEncode(settingModel.toJson());
       await sharedPreferences.setString(CACHED_SETTING, jsonString);
-      print('data source setting: done update : ${settingModel}');
       return Right(unit);
     } catch (e) {
-      print('data source setting: UnKnownFailure');
       return Left(UnKnownFailure(message: e.toString()));
     }
   }

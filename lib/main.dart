@@ -1,3 +1,4 @@
+
 import 'package:azkar/core/utils/notification_helper.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/azkar/AzkarTitlesBloc.dart';
 import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
@@ -6,16 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app_theme.dart';
-import 'features/ziker/presentation/pages/MainScreen.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationHelper.init();
-  // NotificationHelper.firstTimeOnly();
+
   await di.init();
   runApp(
-    const MaterialApp(
+    MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Directionality(
         textDirection: TextDirection.rtl,
@@ -26,6 +26,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
 
   @override

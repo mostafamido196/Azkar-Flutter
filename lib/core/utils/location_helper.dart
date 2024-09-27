@@ -1,8 +1,13 @@
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:location/location.dart' as loc;
 
+import 'InternetConnection.dart';
+
 class LocationUtils {
   static Future<Map<String, String>> getCurrentCityAndCountry() async {
+    if(!await checkInternetConnection()){
+      throw Exception('تاكد من اتصال الانترنت');
+    }
     final location = loc.Location(); // Use loc.Location to avoid conflict
     Map<String, String> locationData = {
       'city': 'Unknown',
@@ -43,7 +48,6 @@ class LocationUtils {
       'city': placemark.locality ?? 'Unknown',
       'country': placemark.country ?? 'Unknown',
     };
-    print('locationData ${locationData}');
 
     return locationData;
   }

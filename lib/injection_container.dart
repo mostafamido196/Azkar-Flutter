@@ -43,7 +43,7 @@ Future<void> init() async {
 
   // Datasources
   sl.registerLazySingleton<ZikerLocalDataSource>(
-      () => ZikerLocalDataSourceImpl());
+          () => ZikerLocalDataSourceImpl());
   sl.registerLazySingleton<SettingDataSource>(
           () => SettingDataSourceImpl(sharedPreferences: sl()));
   sl.registerLazySingleton<PrayerTimesRemoteDataSource>(

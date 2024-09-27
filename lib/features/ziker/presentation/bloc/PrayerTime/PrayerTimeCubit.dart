@@ -24,13 +24,20 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
       if(result.isError){
         emit(PrayerTimesError(result.message!!) );
       }
-      else if (result.data != null)
+      else if (result.data != null) {
         emit(PrayerTimesSuccess(result.data!!));
-      else
+      } else {
         emit(PrayerTimesError('حاول مرة اخرى'));
+      }
     } catch (e) {
-      print('cubit e: ${e.toString()}');
-      emit(PrayerTimesError(e.toString()));
+      if(
+      e.toString().contains('حاول مرة اخرى')||
+      e.toString().contains('مشكلة في السيرفر, اعد المحاولة لاحقا')||
+      e.toString().contains('تاكد من اتصال الانترنت')
+    )
+        emit(PrayerTimesError(e.toString().replaceAll('Exception:', '')));
+    else
+      emit(PrayerTimesError('حاول مرة اخرى'));
     }
   }
 

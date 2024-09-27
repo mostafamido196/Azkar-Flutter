@@ -77,7 +77,6 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
       title: BlocBuilder<SettingBloc, SettingState>(
         builder: (context, state) {
-          print('settingstate : ${state}');
           if (state is LoadingSettingState) {
             // return const Text('الإعدادات');
           } else if (state is LoadedSettingState) {
