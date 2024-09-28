@@ -1,7 +1,7 @@
 name: sahih_adhkar
 description: A new Flutter project.
 
-version: 1.0.0+1
+version: 1.4.0+4
 
 environment:
   sdk: '>=2.19.4 <3.0.0'
