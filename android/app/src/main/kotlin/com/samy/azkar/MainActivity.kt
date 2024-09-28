@@ -1,4 +1,4 @@
-package com.samy.azkar
+package com.samy.azkar2
 
 import io.flutter.embedding.android.FlutterActivity
 

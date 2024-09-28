@@ -49,7 +49,10 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         color: Colors.white,
         child: Center(
-          child: Column(
+          child:AnimatedOpacity(
+              opacity: _startAnimation ? 1.0 : 0.0, // Animate opacity
+              duration: Duration(seconds: 1), // Duration of the fade-in effect
+              child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             // Center vertically
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,21 +65,18 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
 
               SizedBox(height: 20), // Add some spacing
-              AnimatedOpacity(
-                  opacity: _startAnimation ? 1.0 : 0.0, // Animate opacity
-                  duration: Duration(seconds: 1), // Duration of the fade-in effect
-                  child: Text(
+               Text(
                     'صحيح الأذكار',
                     style: TextStyle(
                       fontSize: 40,
                       color: AppColors.c4Actionbar,
                     ),
                     textAlign: TextAlign.center,
-                  )),
+                  ),
             ],
           ),
         ),
       ),
-    );
+    ));
   }
 }
