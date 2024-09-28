@@ -1,6 +1,3 @@
-import 'package:azkar/features/ziker/domain/usecases/GetAllAzkarUsecase.dart';
-import 'package:azkar/features/ziker/domain/usecases/GetOldSettingUsecase.dart';
-import 'package:azkar/features/ziker/domain/usecases/SetNewSettingUsecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +6,8 @@ import '../../../../../../core/error/failures.dart';
 import '../../../../../../core/strings/failures.dart';
 import '../../../../../../core/strings/messages.dart';
 import '../../../../domain/entities/Setting.dart';
+import '../../../../domain/usecases/GetOldSettingUsecase.dart';
+import '../../../../domain/usecases/SetNewSettingUsecase.dart';
 
 part 'SettingEvent.dart';
 

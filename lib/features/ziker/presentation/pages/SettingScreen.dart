@@ -1,15 +1,15 @@
-import 'package:azkar/core/utils/FontSize.dart';
-import 'package:azkar/core/utils/notification_helper.dart';
-import 'package:azkar/features/ziker/presentation/bloc/PrayerTime/PrayerTimeCubit.dart';
-import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
-import 'package:azkar/features/ziker/presentation/widgets/SettingPageWidget/SettingWidget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/utils/FontSize.dart';
+import '../../../../core/utils/Utils.dart';
+import '../../../../core/utils/notification_helper.dart';
+import '../bloc/PrayerTime/PrayerTimeCubit.dart';
+import '../bloc/azkar/setting/SettingBloc.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../core/utils/Utils.dart';
-import '../../../../injection_container.dart';
 import '../../domain/entities/Setting.dart';
+import '../widgets/SettingPageWidget/SettingWidget.dart';
 
 class SettingScreen extends StatefulWidget {
   SettingScreen({Key? key}) : super(key: key);

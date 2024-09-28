@@ -1,10 +1,10 @@
 
 
-import 'package:azkar/features/ziker/domain/entities/Setting.dart';
+import '../entities/Setting.dart';
+import '../repositories/SettingRepository.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failures.dart';
-import '../repositories/SettingRepository.dart';
 
 class UpdateSettingUsecase {
   final SettingRepository repository;

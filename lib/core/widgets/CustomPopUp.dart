@@ -1,7 +1,7 @@
-import 'package:azkar/core/colors.dart';
-import 'package:azkar/features/ziker/presentation/pages/MainScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../colors.dart';
 
 class CustomPopupWidget extends StatelessWidget {
   final Function() onBack;

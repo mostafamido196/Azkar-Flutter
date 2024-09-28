@@ -1,11 +1,11 @@
 
-import 'package:azkar/features/ziker/data/datasources/ZikerLocalDataSource.dart';
-import 'package:azkar/features/ziker/domain/entities/Ziker.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
+import '../../domain/entities/Ziker.dart';
 import '../../domain/repositories/ZikerRepository.dart';
+import '../datasources/ZikerLocalDataSource.dart';
 
 
 class Zikerrepositoryimpl implements ZikerRepository {

@@ -1,9 +1,9 @@
 
-import 'package:azkar/features/ziker/domain/entities/Ziker.dart';
-import 'package:azkar/features/ziker/domain/repositories/ZikerRepository.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failures.dart';
+import '../entities/Ziker.dart';
+import '../repositories/ZikerRepository.dart';
 
 class GetAllAzkarUsecase {
   final ZikerRepository repository;

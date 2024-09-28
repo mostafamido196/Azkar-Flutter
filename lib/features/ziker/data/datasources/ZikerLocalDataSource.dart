@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-import 'package:azkar/core/utils/FontSize.dart';
-import 'package:azkar/core/error/failures.dart';
-import 'package:azkar/features/ziker/data/datasources/SettingDataSorce.dart';
-import 'package:azkar/features/ziker/domain/repositories/SettingRepository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

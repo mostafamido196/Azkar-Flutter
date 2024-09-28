@@ -1,12 +1,11 @@
-import 'package:azkar/features/ziker/data/datasources/SettingDataSorce.dart';
-import 'package:azkar/features/ziker/data/models/SettingModel.dart';
-import 'package:azkar/features/ziker/domain/entities/Setting.dart';
-import 'package:azkar/features/ziker/domain/usecases/SetNewSettingUsecase.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
+import '../../domain/entities/Setting.dart';
 import '../../domain/repositories/SettingRepository.dart';
+import '../datasources/SettingDataSorce.dart';
+import '../models/SettingModel.dart';
 
 class SettingRepositoryImpl implements SettingRepository {
   final SettingDataSource settingDataSource;

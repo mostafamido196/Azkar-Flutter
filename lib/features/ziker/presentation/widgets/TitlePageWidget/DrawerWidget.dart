@@ -1,10 +1,10 @@
-import 'package:azkar/core/colors.dart';
-import 'package:azkar/features/ziker/presentation/pages/AboutScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../../core/colors.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
+import '../../pages/AboutScreen.dart';
 import '../../pages/SettingScreen.dart';
 
 class DrawerWidget extends StatelessWidget {

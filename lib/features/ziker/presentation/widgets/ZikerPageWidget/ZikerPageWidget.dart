@@ -1,19 +1,17 @@
 import 'dart:ffi';
 import 'dart:math';
 
-import 'package:azkar/core/utils/FontSize.dart';
-import 'package:azkar/core/utils/Utils.dart';
-import 'package:azkar/core/colors.dart';
-import 'package:azkar/features/ziker/domain/entities/Hadith.dart';
-import 'package:azkar/features/ziker/domain/entities/Ziker.dart';
-import 'package:azkar/features/ziker/presentation/pages/ZikerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:ui' as ui;
 
+import '../../../../../core/colors.dart';
+import '../../../../../core/utils/FontSize.dart';
+import '../../../../../core/utils/Utils.dart';
 import '../../../../../core/widgets/CustomPopUp.dart';
 import '../../../../../core/widgets/intermittent_line/DashedLinePainter.dart';
 import '../../../../../core/widgets/intermittent_line/LinePainter.dart';
+import '../../../domain/entities/Ziker.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
 import '../../pages/MainScreen.dart';
 import 'package:audioplayers/audioplayers.dart';

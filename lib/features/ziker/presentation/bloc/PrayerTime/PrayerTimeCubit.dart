@@ -1,6 +1,4 @@
-import 'package:azkar/core/utils/Status.dart';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import '../../../../../core/utils/location_helper.dart';
 import '../../../domain/usecases/GetPrayerTimesUsecase.dart';
 import 'PrayerTimeState.dart';

@@ -1,10 +1,9 @@
 
 
 
-import 'package:azkar/features/ziker/domain/entities/Hadith.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../core/utils/FontSize.dart';
+import 'Hadith.dart';
 
 class Ziker extends Equatable {
   final int id;

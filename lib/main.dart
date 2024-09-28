@@ -1,12 +1,11 @@
-
-import 'package:azkar/core/utils/notification_helper.dart';
-import 'package:azkar/features/ziker/presentation/bloc/azkar/azkar/AzkarTitlesBloc.dart';
-import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
-import 'package:azkar/features/ziker/presentation/pages/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app_theme.dart';
+import 'core/utils/notification_helper.dart';
+import 'features/ziker/presentation/bloc/azkar/azkar/AzkarTitlesBloc.dart';
+import 'features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
+import 'features/ziker/presentation/pages/SplashScreen.dart';
 import 'injection_container.dart' as di;
 
 void main() async {

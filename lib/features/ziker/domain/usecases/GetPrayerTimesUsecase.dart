@@ -1,8 +1,4 @@
-// lib/domain/usecases/get_prayer_times.dart
-
-import 'package:azkar/core/utils/Status.dart';
-import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
+import '../../../../core/utils/Status.dart';
 import '../entities/PrayerTime.dart';
 import '../repositories/PrayerTimeRepository.dart';
 

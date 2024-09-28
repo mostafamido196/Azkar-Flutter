@@ -1,6 +1,7 @@
 
-import 'package:azkar/features/ziker/domain/entities/Hadith.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../domain/entities/Hadith.dart';
 
 
 class HadithResponse extends Hadith {

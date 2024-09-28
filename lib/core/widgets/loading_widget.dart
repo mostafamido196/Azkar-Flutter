@@ -1,4 +1,4 @@
-import 'package:azkar/core/colors.dart';
+import '../colors.dart';
 
 import '../app_theme.dart';
 import 'package:flutter/material.dart';

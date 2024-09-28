@@ -1,5 +1,3 @@
-import 'package:azkar/features/ziker/domain/entities/Setting.dart';
-import 'package:azkar/features/ziker/presentation/pages/ZikerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,6 +7,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
 import '../../features/ziker/domain/entities/PrayerTime.dart';
+import '../../features/ziker/domain/entities/Setting.dart';
 import '../../features/ziker/domain/usecases/GetPrayerTimesUsecase.dart';
 import '../../features/ziker/domain/usecases/SetNewSettingUsecase.dart';
 import '../../features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';

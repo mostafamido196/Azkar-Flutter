@@ -1,14 +1,13 @@
-import 'package:azkar/core/utils/FontSize.dart';
-import 'package:azkar/features/ziker/domain/entities/Ziker.dart';
-import 'package:azkar/features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
-import 'package:azkar/features/ziker/presentation/widgets/ZikerPageWidget/ZikerPageWidget.dart';
-import 'package:azkar/features/ziker/presentation/widgets/titlePageWidget/DrawerWidget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/utils/FontSize.dart';
 import '../../../../core/utils/Utils.dart';
 import '../../../../core/widgets/loading_widget.dart';
+import '../../domain/entities/Ziker.dart';
 import '../bloc/azkar/azkar/AzkarTitlesBloc.dart';
-import '../widgets/titlePageWidget/TitlesListPageWidget.dart';
+import '../bloc/azkar/setting/SettingBloc.dart';
+import '../widgets/ZikerPageWidget/ZikerPageWidget.dart';
 import '../widgets/titlePageWidget/message_display_widget.dart';
 
 class ZikerPage extends StatelessWidget {

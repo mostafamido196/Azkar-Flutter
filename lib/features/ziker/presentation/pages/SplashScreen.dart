@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:azkar/core/colors.dart';
-import 'package:azkar/features/ziker/presentation/pages/MainScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../../core/colors.dart';
+import 'MainScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

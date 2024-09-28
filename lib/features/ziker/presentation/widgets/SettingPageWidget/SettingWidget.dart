@@ -1,4 +1,3 @@
-import 'package:azkar/features/ziker/domain/entities/PrayerTime.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +8,7 @@ import '../../../../../core/utils/FontSize.dart';
 import '../../../../../core/utils/Utils.dart';
 import '../../../../../core/colors.dart';
 import '../../../../../core/utils/location_helper.dart';
+import '../../../domain/entities/PrayerTime.dart';
 import '../../../domain/entities/Setting.dart';
 import '../../bloc/PrayerTime/PrayerTimeCubit.dart';
 import '../../bloc/PrayerTime/PrayerTimeState.dart';
