@@ -9,4 +9,5 @@ Future<bool> checkInternetConnection() async {
     print('Device is not connected to the internet');
     return false;
   }
+
 }
