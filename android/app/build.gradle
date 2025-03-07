@@ -37,7 +37,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-
+    signingConfigs {
+        release {
+            storeFile file("C:\\Users\\Restart\\Documents\\mykeystore\\mykeystore1.jks") // Full path to your keystore
+            storePassword "276217" // Keystore password
+            keyAlias "key0"        // Alias name
+            keyPassword "276217"   // Alias-specific password
+        }
+    }
     kotlinOptions {
         jvmTarget = '17'
     }
@@ -56,7 +63,9 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+            minifyEnabled true     // Enable code shrinking (optional)
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }

@@ -15,6 +15,9 @@ import '../../features/ziker/presentation/pages/MainScreen.dart';
 import '../../injection_container.dart';
 import 'FontSize.dart';
 import 'location_helper.dart';
+import 'dart:io';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NotificationHelper {
   static late final FlutterLocalNotificationsPlugin _notification;
@@ -22,6 +25,43 @@ class NotificationHelper {
   // Static getter to access the _notification instance
   static FlutterLocalNotificationsPlugin getNotificationInstance() {
     return _notification;
+  }
+
+  static Future<void> requestPermissions() async {
+    print('1');
+    try {
+      print('2');
+      if (Platform.isAndroid) {
+        print('3');
+        // For Android
+        // Let's check all possible states
+        final status = await Permission.notification.status;
+        print('Current permission status: $status');
+
+        if (status.isDenied) {
+          print('4');
+          final newStatus = await Permission.notification.request();
+          debugPrint('Android Permission Status: ${newStatus.isGranted}');
+        } else {
+          print('Permission not denied. Current state: $status');
+        }
+      } else if (Platform.isIOS) {
+        print('5');
+        // For iOS
+        final bool? iosGranted = await _notification
+            .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+            ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+        debugPrint('iOS Permission Status: $iosGranted');
+      }
+      print('6');
+    } catch (e) {
+      print('7');
+      debugPrint('Permission Request Error: $e');
+    }
   }
 
   static init() {
@@ -55,26 +95,6 @@ class NotificationHelper {
       matchDateTimeComponents: DateTimeComponents
           .time, // This ensures daily repeat at the specified time
     );
-  }
-
-  static Future<void> requestPermissions() async {
-    // Request iOS permissions
-    final bool? iosGranted = await _notification
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(alert: true, badge: true, sound: true);
-
-    // Check for Android 13+ and request notification permission
-    if (await Permission.notification.isDenied) {
-      PermissionStatus status = await Permission.notification.request();
-      if (status.isGranted) {
-        // debugPrint('Notification permission granted');
-      } else {
-        // debugPrint('Notification permission denied');
-      }
-    }
-
-    // debugPrint('iOS Permission Granted: $iosGranted');
   }
 
   static DateTime _dailySelectedTime(DateTime selectedTime) {
@@ -130,7 +150,6 @@ class NotificationHelper {
       cancelNotification(id);
     }
   }
-
 
   static DateTime _selectedTime(TimeOfDay time, DateTime now) {
     return DateTime(now.year, now.month, now.day, time.hour, time.minute);
@@ -194,29 +213,28 @@ class NotificationHelper {
   }
 
   static void updatePrayersTime(BuildContext context) async {
-      try {
-        final locationData = await LocationUtils.getCurrentCityAndCountry();
-        final city = locationData['city'] ?? 'Cairo';
-        final country = locationData['country'] ?? 'Egypt';
+    try {
+      final locationData = await LocationUtils.getCurrentCityAndCountry();
+      final city = locationData['city'] ?? 'Cairo';
+      final country = locationData['country'] ?? 'Egypt';
 
-        // 1. Fetch Prayer Times from Usecase
-        final prayerTimes =
-            await sl<GetPrayerTimesUsecase>().call(city, country);
-        if (prayerTimes.isError) return;
-        final Setting setting =
-            _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
-        // 2. Save it to Settings using UpdateSettingUsecase
-        await sl<UpdateSettingUsecase>().call(setting);
+      // 1. Fetch Prayer Times from Usecase
+      final prayerTimes = await sl<GetPrayerTimesUsecase>().call(city, country);
+      if (prayerTimes.isError) return;
+      final Setting setting =
+          _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
+      // 2. Save it to Settings using UpdateSettingUsecase
+      await sl<UpdateSettingUsecase>().call(setting);
 
-        // 3. Update SettingBloc
-        context.read<SettingBloc>().add(GetOldSettingEvent());
+      // 3. Update SettingBloc
+      context.read<SettingBloc>().add(GetOldSettingEvent());
 
-        pushNotification(setting);
-        print("notification helper update prayer times settings: $setting");
-      } catch (e) {
-        print("Error occurred while initializing settings: $e");
-        // Handle any errors such as network issues or data parsing problems
-      }
+      pushNotification(setting);
+      print("notification helper update prayer times settings: $setting");
+    } catch (e) {
+      print("Error occurred while initializing settings: $e");
+      // Handle any errors such as network issues or data parsing problems
+    }
   }
 
   static Setting _getSettingWithNewPrayersTime(PrayerTime prayerTimes) {

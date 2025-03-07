@@ -1,7 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/new_version/new_version_android.dart';
 import '../../../../core/utils/FontSize.dart';
 import '../../../../core/utils/Utils.dart';
 import '../../../../core/utils/notification_helper.dart';
@@ -27,17 +27,22 @@ class _MyHomePageState extends State<MainPage> {
   final String? title;
 
   _MyHomePageState(this.title);
-
   @override
   void initState() {
+    super.initState();
+
+    _initializeNotifications();
+  }
+
+  void _initializeNotifications() async {
     NotificationHelper.requestPermissions();
     NotificationHelper.updatePrayersTime(context);
     _handleOnClickNotificationEvent(title);
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    checkForUpdateAndShowDialog(context);
     return Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
@@ -73,13 +78,12 @@ class _MyHomePageState extends State<MainPage> {
       leading: IconButton(
           icon: Icon(Icons.dehaze),
           onPressed: () {
-            // checkPendingNotificationRequests(
-            //     context, NotificationHelper.getNotificationInstance());
             if (_scaffoldKey.currentState!.isDrawerOpen == false) {
               _scaffoldKey.currentState!.openDrawer();
             } else {
               _scaffoldKey.currentState!.openEndDrawer();
             }
+            // NotificationHelper.requestPermissions();//todo
           }));
 
   Widget _drawerAndBody() {
