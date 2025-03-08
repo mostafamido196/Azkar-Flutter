@@ -1,23 +1,22 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz_all;
 
 import '../../features/ziker/domain/entities/PrayerTime.dart';
 import '../../features/ziker/domain/entities/Setting.dart';
 import '../../features/ziker/domain/usecases/GetPrayerTimesUsecase.dart';
 import '../../features/ziker/domain/usecases/SetNewSettingUsecase.dart';
 import '../../features/ziker/presentation/bloc/azkar/setting/SettingBloc.dart';
-import '../../features/ziker/presentation/pages/MainScreen.dart';
 import '../../injection_container.dart';
 import 'FontSize.dart';
 import 'location_helper.dart';
-import 'dart:io';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class NotificationHelper {
   static late final FlutterLocalNotificationsPlugin _notification;
@@ -28,25 +27,30 @@ class NotificationHelper {
   }
 
   static Future<void> requestPermissions() async {
-    print('1');
     try {
-      print('2');
       if (Platform.isAndroid) {
-        print('3');
-        // For Android
-        // Let's check all possible states
-        final status = await Permission.notification.status;
-        print('Current permission status: $status');
+        // Check Android version
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        final sdkInt = androidInfo.version.sdkInt;
 
-        if (status.isDenied) {
-          print('4');
-          final newStatus = await Permission.notification.request();
-          debugPrint('Android Permission Status: ${newStatus.isGranted}');
+        if (sdkInt >= 33) {  // Android 13 or higher
+          // Request notification permission using the new API
+          final status = await Permission.notification.status;
+
+          if (status.isDenied) {
+            final newStatus = await Permission.notification.request();
+            debugPrint('Android 13+ Permission Status: ${newStatus.isGranted}');
+          }
         } else {
-          print('Permission not denied. Current state: $status');
+          // For Android 12 and below
+          final status = await Permission.notification.status;
+
+          if (status.isDenied) {
+            final newStatus = await Permission.notification.request();
+            debugPrint('Android Permission Status: ${newStatus.isGranted}');
+          }
         }
       } else if (Platform.isIOS) {
-        print('5');
         // For iOS
         final bool? iosGranted = await _notification
             .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
@@ -57,60 +61,114 @@ class NotificationHelper {
         );
         debugPrint('iOS Permission Status: $iosGranted');
       }
-      print('6');
     } catch (e) {
-      print('7');
       debugPrint('Permission Request Error: $e');
     }
   }
 
   static init() {
     _notification = FlutterLocalNotificationsPlugin();
+
+    // Create the notification channel explicitly
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'scheduled_channel',
+      'Scheduled Notifications',
+      importance: Importance.max,
+      playSound: true,
+      enableVibration: true,
+    );
+
+    // Register the channel with the system
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
     _notification.initialize(
         const InitializationSettings(
             android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-            iOS: DarwinInitializationSettings()),
-        onDidReceiveNotificationResponse:
-            (NotificationResponse response) async {
-      final payload = response.payload;
-      if (payload != null) {}
-    });
-    tz.initializeTimeZones();
-  }
-
-  static scheduledDailyNotification(
-      {required int id,
-      required String title,
-      required String body,
-      required DateTime selectedTime}) async {
-    // push notification
-    await _notification.zonedSchedule(
-      id, title, body,
-      tz.TZDateTime.from(_dailySelectedTime(selectedTime), tz.local),
-      _notificationDetails(),
-      payload: body,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.wallClockTime,
-      matchDateTimeComponents: DateTimeComponents
-          .time, // This ensures daily repeat at the specified time
+            iOS: DarwinInitializationSettings()
+        ),
+        onDidReceiveNotificationResponse: (NotificationResponse response) async {
+          final payload = response.payload;
+          if (payload != null) {}
+        }
     );
-  }
 
-  static DateTime _dailySelectedTime(DateTime selectedTime) {
-    // to make notification daily
-    if (selectedTime.isBefore(DateTime.now())) {
-      return selectedTime.add(const Duration(days: 1));
-    }
-    return selectedTime;
+    tz_all.initializeTimeZones();
   }
 
   static NotificationDetails _notificationDetails() {
     var androidDetail = const AndroidNotificationDetails(
-        'important_notification', 'my_channel',
-        importance: Importance.max, priority: Priority.high);
-    var iosDetail = const DarwinNotificationDetails();
+        'scheduled_channel', 'Scheduled Notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        enableVibration: true
+    );
+    var iosDetail = const DarwinNotificationDetails(
+      presentSound: true,
+      presentAlert: true,
+      presentBadge: true,
+    );
     return NotificationDetails(android: androidDetail, iOS: iosDetail);
+  }
+
+  static tz.TZDateTime _createScheduleTime(DateTime selectedTime) {
+    final now = DateTime.now();
+    final scheduleDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
+
+    // If time has already passed today, schedule for tomorrow
+    final scheduleDateTime = scheduleDate.isBefore(now)
+        ? scheduleDate.add(const Duration(days: 1))
+        : scheduleDate;
+
+    debugPrint('Creating schedule time:');
+    debugPrint('Now: ${now.toString()}');
+    debugPrint('Initial date: ${scheduleDate.toString()}');
+    debugPrint('Final date: ${scheduleDateTime.toString()}');
+
+    return tz.TZDateTime.from(scheduleDateTime, tz.local);
+  }
+
+  static Future<void> scheduledDailyNotification({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime selectedTime
+  }) async {
+    final tz.TZDateTime zonedTime = _createScheduleTime(selectedTime);
+
+    debugPrint('Scheduling notification #$id:');
+    debugPrint('Title: $title');
+    debugPrint('Body: $body');
+    debugPrint('Zoned time: ${zonedTime.toString()}');
+
+    try {
+      await _notification.zonedSchedule(
+        id,
+        title,
+        body,
+        zonedTime,
+        _notificationDetails(),
+        payload: body,
+        androidScheduleMode: AndroidScheduleMode.exact,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.wallClockTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+      debugPrint('Notification #$id scheduled successfully');
+    } catch (e) {
+      debugPrint('Error scheduling notification #$id: $e');
+    }
   }
 
   static void pushNotification(Setting setting) {
@@ -133,13 +191,16 @@ class NotificationHelper {
         id: 8, time: setting.magrep, turnOn: setting.isMagrep, now: now);
     _setTimeNotification(
         id: 9, time: setting.isha, turnOn: setting.isIsha, now: now);
+
+
+
   }
 
   static void _setTimeNotification(
       {required int id,
-      required TimeOfDay time,
-      required bool turnOn,
-      required now}) {
+        required TimeOfDay time,
+        required bool turnOn,
+        required now}) {
     if (turnOn) {
       scheduledDailyNotification(
           id: id,
@@ -182,6 +243,31 @@ class NotificationHelper {
     await _notification.cancel(notificationId);
   }
 
+  // Test function for debugging
+  static void testScheduledNotification() {
+    final DateTime now = DateTime.now();
+    final DateTime scheduledTime = now.add(const Duration(minutes: 2));
+
+    debugPrint('Current time: ${now.toString()}');
+    debugPrint('Scheduling test notification for: ${scheduledTime.toString()}');
+
+    _notification.zonedSchedule(
+      888,
+      'Test Scheduled Notification',
+      'This should appear 2 minutes after being scheduled',
+      tz.TZDateTime.from(scheduledTime, tz.local),
+      _notificationDetails(),
+      androidScheduleMode: AndroidScheduleMode.exact,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+    ).then((_) {
+      debugPrint('Test notification scheduled successfully');
+    }).catchError((error) {
+      debugPrint('Error scheduling test notification: $error');
+    });
+  }
+
+  // Rest of your methods remain the same...
   static void firstTimeOnly(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     final bool isFirstRun = prefs.getBool('isFirstRun') ?? true;
@@ -193,10 +279,10 @@ class NotificationHelper {
 
         // 1. Fetch Prayer Times from Usecase
         final prayerTimes =
-            await sl<GetPrayerTimesUsecase>().call(city, country);
+        await sl<GetPrayerTimesUsecase>().call(city, country);
         if (prayerTimes.isError) return;
         final Setting setting =
-            _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
+        _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
         // 2. Save it to Settings using UpdateSettingUsecase
         await sl<UpdateSettingUsecase>().call(setting);
 
@@ -222,7 +308,7 @@ class NotificationHelper {
       final prayerTimes = await sl<GetPrayerTimesUsecase>().call(city, country);
       if (prayerTimes.isError) return;
       final Setting setting =
-          _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
+      _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
       // 2. Save it to Settings using UpdateSettingUsecase
       await sl<UpdateSettingUsecase>().call(setting);
 

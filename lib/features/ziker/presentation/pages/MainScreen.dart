@@ -38,6 +38,11 @@ class _MyHomePageState extends State<MainPage> {
     NotificationHelper.requestPermissions();
     NotificationHelper.updatePrayersTime(context);
     _handleOnClickNotificationEvent(title);
+    //test notification
+    // NotificationHelper.showTestNotification();
+    // NotificationHelper.testScheduledNotification();
+    // NotificationHelper.scheduleTestNotificationIn5Minutes('title', 'body');
+    // print('areNotificationsEnabled: ${NotificationHelper.areNotificationsEnabled()}');
   }
 
   @override
