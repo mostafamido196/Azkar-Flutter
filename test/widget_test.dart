@@ -7,7 +7,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sahih_adhkar/main.dart';
+import 'package:sahih_azkar/main.dart';
+
 
 
 void main() {

@@ -33,7 +33,8 @@ class NotificationHelper {
         final androidInfo = await DeviceInfoPlugin().androidInfo;
         final sdkInt = androidInfo.version.sdkInt;
 
-        if (sdkInt >= 33) {  // Android 13 or higher
+        if (sdkInt >= 33) {
+          // Android 13 or higher
           // Request notification permission using the new API
           final status = await Permission.notification.status;
 
@@ -53,12 +54,13 @@ class NotificationHelper {
       } else if (Platform.isIOS) {
         // For iOS
         final bool? iosGranted = await _notification
-            .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+            .resolvePlatformSpecificImplementation<
+                IOSFlutterLocalNotificationsPlugin>()
             ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
+              alert: true,
+              badge: true,
+              sound: true,
+            );
         debugPrint('iOS Permission Status: $iosGranted');
       }
     } catch (e) {
@@ -80,34 +82,35 @@ class NotificationHelper {
 
     // Register the channel with the system
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+        FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
     _notification.initialize(
         const InitializationSettings(
             android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-            iOS: DarwinInitializationSettings()
-        ),
-        onDidReceiveNotificationResponse: (NotificationResponse response) async {
-          final payload = response.payload;
-          if (payload != null) {}
-        }
-    );
+            iOS: DarwinInitializationSettings()),
+        onDidReceiveNotificationResponse:
+            (NotificationResponse response) async {
+      final payload = response.payload;
+      if (payload != null) {}
+    });
 
     tz_all.initializeTimeZones();
+    final String timeZoneName = tz.local.name;
+    print('timeZoneName: $timeZoneName');
   }
 
   static NotificationDetails _notificationDetails() {
     var androidDetail = const AndroidNotificationDetails(
-        'scheduled_channel', 'Scheduled Notifications',
+        'scheduled_channel','Scheduled Notifications',
+        // description: 'Channel for scheduled notifications',
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,
-        enableVibration: true
-    );
+        enableVibration: true);
     var iosDetail = const DarwinNotificationDetails(
       presentSound: true,
       presentAlert: true,
@@ -139,12 +142,11 @@ class NotificationHelper {
     return tz.TZDateTime.from(scheduleDateTime, tz.local);
   }
 
-  static Future<void> scheduledDailyNotification({
-    required int id,
-    required String title,
-    required String body,
-    required DateTime selectedTime
-  }) async {
+  static Future<void> scheduledDailyNotification(
+      {required int id,
+      required String title,
+      required String body,
+      required DateTime selectedTime}) async {
     final tz.TZDateTime zonedTime = _createScheduleTime(selectedTime);
 
     debugPrint('Scheduling notification #$id:');
@@ -159,10 +161,11 @@ class NotificationHelper {
         body,
         zonedTime,
         _notificationDetails(),
+        // androidAllowWhileIdle: true,
         payload: body,
         androidScheduleMode: AndroidScheduleMode.exact,
         uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.wallClockTime,
+            UILocalNotificationDateInterpretation.wallClockTime,
         matchDateTimeComponents: DateTimeComponents.time,
       );
       debugPrint('Notification #$id scheduled successfully');
@@ -191,16 +194,13 @@ class NotificationHelper {
         id: 8, time: setting.magrep, turnOn: setting.isMagrep, now: now);
     _setTimeNotification(
         id: 9, time: setting.isha, turnOn: setting.isIsha, now: now);
-
-
-
   }
 
   static void _setTimeNotification(
       {required int id,
-        required TimeOfDay time,
-        required bool turnOn,
-        required now}) {
+      required TimeOfDay time,
+      required bool turnOn,
+      required now}) {
     if (turnOn) {
       scheduledDailyNotification(
           id: id,
@@ -251,7 +251,8 @@ class NotificationHelper {
     debugPrint('Current time: ${now.toString()}');
     debugPrint('Scheduling test notification for: ${scheduledTime.toString()}');
 
-    _notification.zonedSchedule(
+    _notification
+        .zonedSchedule(
       888,
       'Test Scheduled Notification',
       'This should appear 2 minutes after being scheduled',
@@ -259,8 +260,9 @@ class NotificationHelper {
       _notificationDetails(),
       androidScheduleMode: AndroidScheduleMode.exact,
       uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
-    ).then((_) {
+          UILocalNotificationDateInterpretation.absoluteTime,
+    )
+        .then((_) {
       debugPrint('Test notification scheduled successfully');
     }).catchError((error) {
       debugPrint('Error scheduling test notification: $error');
@@ -279,10 +281,10 @@ class NotificationHelper {
 
         // 1. Fetch Prayer Times from Usecase
         final prayerTimes =
-        await sl<GetPrayerTimesUsecase>().call(city, country);
+            await sl<GetPrayerTimesUsecase>().call(city, country);
         if (prayerTimes.isError) return;
         final Setting setting =
-        _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
+            _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
         // 2. Save it to Settings using UpdateSettingUsecase
         await sl<UpdateSettingUsecase>().call(setting);
 
@@ -308,7 +310,7 @@ class NotificationHelper {
       final prayerTimes = await sl<GetPrayerTimesUsecase>().call(city, country);
       if (prayerTimes.isError) return;
       final Setting setting =
-      _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
+          _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
       // 2. Save it to Settings using UpdateSettingUsecase
       await sl<UpdateSettingUsecase>().call(setting);
 
