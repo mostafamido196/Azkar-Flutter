@@ -267,7 +267,7 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    myObject.matn,
+                    myObject.matn.replaceArabicNumbers(),
                     style: TextStyle(
                         fontSize: _fontSize,
                         color: AppColors.c4Actionbar,
@@ -286,7 +286,7 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    myObject.isnad,
+                    myObject.isnad.replaceArabicNumbers(),
                     style: TextStyle(
                       fontSize: _fontSize - 2,
                       color: AppColors.c4Actionbar,
