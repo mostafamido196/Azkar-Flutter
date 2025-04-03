@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahih_azkar/features/ziker/data/models/HadithModel.dart';
 import 'dart:ui' as ui;
 
 import '../../../../../core/colors.dart';
@@ -11,11 +12,14 @@ import '../../../../../core/utils/Utils.dart';
 import '../../../../../core/widgets/CustomPopUp.dart';
 import '../../../../../core/widgets/intermittent_line/DashedLinePainter.dart';
 import '../../../../../core/widgets/intermittent_line/LinePainter.dart';
+import '../../../domain/entities/Hadith.dart';
 import '../../../domain/entities/Ziker.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
 import '../../pages/MainScreen.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:vibration/vibration.dart';
+
+import 'SpansTextWidget.dart';
 
 class ZikerPageWidget extends StatefulWidget {
   final Ziker azkar;
@@ -38,13 +42,15 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
   bool _isTransfer = true;
 
   AudioPlayer audioPlayer = AudioPlayer();
-@override
+
+  @override
   void initState() {
     super.initState();
     final path = AssetSource('audio/light_button.mp3');
-     audioPlayer.setSource(path);
-     audioPlayer.setReleaseMode(ReleaseMode.stop);
+    audioPlayer.setSource(path);
+    audioPlayer.setReleaseMode(ReleaseMode.stop);
   }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -249,8 +255,8 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
     );
   }
 
-  Widget _PagerContent(BuildContext context, int index) {
-    final myObject = widget.azkar.arr[index];
+  Widget _PagerContent(BuildContext context, int zikerIndex) {
+    final myObject = widget.azkar.arr[zikerIndex];
     return Stack(
       children: [
         CustomPaint(
@@ -263,17 +269,7 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  alignment: Alignment.topRight,
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    myObject.matn.replaceArabicNumbers(),
-                    style: TextStyle(
-                        fontSize: _fontSize,
-                        color: AppColors.c4Actionbar,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
+                _IsnadTexts(ZikerIndex: widget.azkar.id, hadith: myObject),
                 if (myObject.isnad.isNotEmpty)
                   CustomPaint(
                     size: ui.Size(double.infinity, 2),
@@ -289,6 +285,8 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
                     myObject.isnad.replaceArabicNumbers(),
                     style: TextStyle(
                       fontSize: _fontSize - 2,
+                      height: 1.6,
+                      fontFamily: 'scheherazade',
                       color: AppColors.c4Actionbar,
                     ),
                   ),
@@ -304,7 +302,6 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
   void makeSound() async {
     if (!_isSound) return;
     audioPlayer.resume();
-
   }
 
   void makeVibrate() async {
@@ -321,10 +318,54 @@ class _ZikerPageWidgetState extends State<ZikerPageWidget> {
   }
 
   void goTONext() {
-    if(!_isTransfer)return;
+    if (!_isTransfer) return;
     _pageController.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
+    );
+  }
+
+  Widget _IsnadTexts({required int ZikerIndex, required Hadith hadith}) {
+    String matn = hadith.matn;
+    String title = "";
+    if (hadith.hasTitle) {
+      List<String> parts = hadith.matn.split('\n');
+      title = parts.isNotEmpty ? parts.first : "";
+      matn = parts.length > 1 ? parts.sublist(1).join('\n') : "";
+    }
+    return Container(
+      alignment: Alignment.topRight,
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (hadith.hasTitle)
+            Align(
+              alignment: Alignment.center,
+              child: SpansTextWidget(
+                text: title,
+                style: TextStyle(
+                  fontSize: _fontSize + 2,
+                  fontFamily: 'scheherazade',
+                  height: 1.6,
+                  color: AppColors.c4Actionbar,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          if (hadith.hasTitle) SizedBox(height: 8),
+          SpansTextWidget(
+            text: matn,
+            style: TextStyle(
+              fontSize: _fontSize,
+              fontFamily: 'scheherazade',
+              height: 1.6,
+              color: AppColors.c4Actionbar,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

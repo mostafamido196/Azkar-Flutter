@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sahih_azkar/features/ziker/domain/usecases/GetOldSettingUsecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz_all;
@@ -268,8 +269,7 @@ class NotificationHelper {
       debugPrint('Error scheduling test notification: $error');
     });
   }
-
-  // Rest of your methods remain the same...
+/*  // Rest of your methods remain the same...
   static void firstTimeOnly(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     final bool isFirstRun = prefs.getBool('isFirstRun') ?? true;
@@ -298,7 +298,7 @@ class NotificationHelper {
         // Handle any errors such as network issues or data parsing problems
       }
     }
-  }
+  }*/
 
   static void updatePrayersTime(BuildContext context) async {
     try {
@@ -308,9 +308,10 @@ class NotificationHelper {
 
       // 1. Fetch Prayer Times from Usecase
       final prayerTimes = await sl<GetPrayerTimesUsecase>().call(city, country);
+      final oldSetting = await sl<GetOldSettingUsecase>().call();
       if (prayerTimes.isError) return;
       final Setting setting =
-          _getSettingWithNewPrayersTime(prayerTimes.data as PrayerTime);
+          _getSettingWithNewPrayersTime(oldSetting as Setting,prayerTimes.data as PrayerTime);
       // 2. Save it to Settings using UpdateSettingUsecase
       await sl<UpdateSettingUsecase>().call(setting);
 
@@ -325,30 +326,30 @@ class NotificationHelper {
     }
   }
 
-  static Setting _getSettingWithNewPrayersTime(PrayerTime prayerTimes) {
+  static Setting _getSettingWithNewPrayersTime(Setting oldSetting, PrayerTime prayerTimes) {
     return Setting(
-      fontSize: FontSize.Median,
-      noisy: true,
-      vibrate: true,
-      transfer: true,
-      walkUp: TimeOfDay(hour: 6, minute: 30),
-      isWalkUp: true,
-      sleep: TimeOfDay(hour: 22, minute: 0),
-      isSleep: true,
-      morning: TimeOfDay(hour: 9, minute: 0),
-      isMorning: true,
-      evening: TimeOfDay(hour: 17, minute: 0),
-      isEvening: true,
+      fontSize:oldSetting.fontSize,
+      noisy: oldSetting.noisy,
+      vibrate: oldSetting.vibrate,
+      transfer: oldSetting.transfer,
+      walkUp: TimeOfDay(hour: oldSetting.walkUp.hour, minute: oldSetting.walkUp.minute),
+      isWalkUp: oldSetting.isWalkUp,
+      sleep: TimeOfDay(hour: oldSetting.sleep.hour, minute: oldSetting.sleep.minute),
+      isSleep: oldSetting.isSleep,
+      morning: TimeOfDay(hour: oldSetting.morning.hour, minute: oldSetting.morning.minute),
+      isMorning: oldSetting.isMorning,
+      evening: TimeOfDay(hour: oldSetting.evening.hour, minute: oldSetting.evening.minute),
+      isEvening: oldSetting.isEvening,
       fager: prayerTimes.fajr,
-      isFager: true,
+      isFager: oldSetting.isFager,
       duher: prayerTimes.dhuhr,
-      isDuher: true,
+      isDuher: oldSetting.isDuher,
       aser: prayerTimes.asr,
-      isAser: true,
+      isAser: oldSetting.isAser,
       magrep: prayerTimes.maghrib,
-      isMagrep: true,
+      isMagrep: oldSetting.isMagrep,
       isha: prayerTimes.isha,
-      isIsha: true,
+      isIsha: oldSetting.isIsha,
     );
   }
 }

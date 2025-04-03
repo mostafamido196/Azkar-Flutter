@@ -53,7 +53,6 @@ class AzkarListWidget extends StatelessWidget {
               azkar[index].name,
               style: TextStyle(
                 fontSize: Utils().fontSize(fontSize),
-                // fontWeight: FontWeight.bold
               ),
             ),
             contentPadding: EdgeInsets.symmetric(horizontal: 10),

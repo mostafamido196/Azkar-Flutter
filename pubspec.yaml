@@ -64,3 +64,9 @@ flutter:
     - family: alfont
       fonts:
         - asset: fonts/alfont_com_alfont_com_4_30.ttf
+    - family: amiri
+      fonts:
+        - asset: fonts/Amiri-Regular.ttf
+    - family: scheherazade
+      fonts:
+        - asset: fonts/ScheherazadeNew-Regular.ttf
