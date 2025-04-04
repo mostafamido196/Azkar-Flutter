@@ -40,9 +40,9 @@ class SpansTextWidget extends StatelessWidget {
         child: Transform.translate(
           offset: Offset(0, -5), // Moves number up (superscript effect)
           child: Text(
-            "(${match.group(1)})",
+            "(${match.group(1)})".replaceArabicNumbers(),
             style: TextStyle(
-              fontSize: style.fontSize! * 0.6, // Smaller size
+              fontSize: style.fontSize! * 0.5, // Smaller size
               color: Colors.blue,      // Blue color
             ),
           ),
