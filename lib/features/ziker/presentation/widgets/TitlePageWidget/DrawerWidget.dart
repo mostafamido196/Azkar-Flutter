@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/colors.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
@@ -28,22 +29,34 @@ class DrawerWidget extends StatelessWidget {
               'الأذكار',
               AppColors.c4Actionbar,
             ),
-            _buildListTile(
+            _buildListTileSVG(
               context,
               'assets/images/baseline_settings_24.svg',
               'الإعدادات',
               AppColors.white,
             ),
-            _buildListTile(
+            _buildListTileSVG(
               context,
               'assets/images/baseline_error_24_white.svg',
               'عن التطبيق',
               AppColors.white,
             ),
-            _buildListTile(
+            _buildListTileSVG(
               context,
               'assets/images/shar.svg',
               'مشاركة التطبيق',
+              AppColors.white,
+            ),
+            _buildListTileOurValue(
+              context,
+              Icons.star,
+              'تقييم صحيح الأذكار',
+              Colors.yellow,
+            ),
+            _buildListTileJpg(
+              context,
+              'assets/images/icon_ganna.jpg',
+              'من أسباب دخول الجنة',
               AppColors.white,
             ),
           ]),
@@ -87,7 +100,7 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildListTile(
+  Widget _buildListTileSVG(
       BuildContext context, String asset, String title, Color contentColor) {
     return ListTile(
       leading: SvgPicture.asset(
@@ -124,6 +137,56 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
+  Widget _buildListTileJpg(
+      BuildContext context, String asset, String title, Color contentColor) {
+    return ListTile(
+      leading: ClipRRect(
+          borderRadius: BorderRadius.circular(12.0), // Set the corner radius
+          child: Image.asset(
+            asset,
+            width: 40.0,
+            height: 40.0,
+            fit: BoxFit.cover,
+          )),
+      title: Text(title),
+      textColor: contentColor,
+      onTap: () {
+        if (Scaffold.of(context).isDrawerOpen) {
+          Navigator.of(context).pop();
+        }
+        openPlayStoreLink();
+      },
+    );
+  }
+  Widget _buildListTileOurValue(
+      BuildContext context, IconData icon, String title, Color contentColor) {
+    return ListTile(
+      leading: Icon(
+        icon, // Pass the IconData here
+        size: 40.0, // Set size of the icon
+        color: contentColor, // Set color of the icon
+      ),
+      title: Text(title),
+      textColor: Colors.white,
+      onTap: () {
+        if (Scaffold.of(context).isDrawerOpen) {
+          Navigator.of(context).pop();
+        }
+        openAppReviewPage();
+      },
+    );
+  }
+
+  void openPlayStoreLink() async {
+    const url = 'https://play.google.com/store/apps/details?id=com.samy.ganna';
+
+    // Check if the Play Store app can handle the market scheme
+    if (await canLaunch('market://details?id=com.samy.ganna')) {
+      await launch('market://details?id=com.samy.ganna'); // Opens in Play Store app
+    } else {
+      await launch(url); // Fallback to opening in browser
+    }
+  }
   void _gotoSettingPage(BuildContext context) {
     Navigator.push(
       context,
@@ -132,10 +195,12 @@ class DrawerWidget extends StatelessWidget {
       ),
     );
   }
+
   void _shareApp() {
     try {
       const String appName = "صحيح الأذكار";
-      const String appLink = "https://play.google.com/store/apps/details?id=com.samy.azkar2&hl=en-US";
+      const String appLink =
+          "https://play.google.com/store/apps/details?id=com.samy.azkar2&hl=en-US";
       const String shareMessage = "$appName\n\n$appLink";
 
       Share.share(shareMessage).then((_) {
@@ -145,6 +210,19 @@ class DrawerWidget extends StatelessWidget {
       });
     } catch (e) {
       print("Exception during share: $e");
+    }
+  }
+
+  void openAppReviewPage() async {
+    const packageName = 'com.samy.azkar2'; // Replace with your app's package name
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=$packageName';
+    const marketUrl = 'market://details?id=$packageName';
+
+    // Check if the Play Store app can handle the market scheme
+    if (await canLaunch(marketUrl)) {
+      await launch(marketUrl); // Opens directly in Play Store app
+    } else {
+      await launch(playStoreUrl); // Fallback to opening in browser
     }
   }
 

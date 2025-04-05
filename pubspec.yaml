@@ -31,6 +31,7 @@ dependencies:
   package_info_plus: ^8.2.1
   device_info_plus: ^11.3.0
   share_plus: ^10.1.4
+  in_app_review: ^2.0.10
 
 dev_dependencies:
   flutter_test:
