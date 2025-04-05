@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../../core/colors.dart';
 import '../../bloc/azkar/setting/SettingBloc.dart';
@@ -37,6 +38,12 @@ class DrawerWidget extends StatelessWidget {
               context,
               'assets/images/baseline_error_24_white.svg',
               'عن التطبيق',
+              AppColors.white,
+            ),
+            _buildListTile(
+              context,
+              'assets/images/shar.svg',
+              'مشاركة التطبيق',
               AppColors.white,
             ),
           ]),
@@ -81,15 +88,16 @@ class DrawerWidget extends StatelessWidget {
   }
 
   Widget _buildListTile(
-      BuildContext context, String asset, String title, Color textColor) {
+      BuildContext context, String asset, String title, Color contentColor) {
     return ListTile(
       leading: SvgPicture.asset(
         asset,
         width: 24.0,
         height: 24.0,
+        colorFilter: ColorFilter.mode(contentColor, BlendMode.srcIn),
       ),
       title: Text(title),
-      textColor: textColor,
+      textColor: contentColor,
       onTap: () {
         if (Scaffold.of(context).isDrawerOpen) {
           Navigator.of(context).pop();
@@ -106,6 +114,9 @@ class DrawerWidget extends StatelessWidget {
               ),
             );
             break;
+          case 'مشاركة التطبيق':
+            _shareApp();
+            break;
           default:
           // Default code block
         }
@@ -121,4 +132,20 @@ class DrawerWidget extends StatelessWidget {
       ),
     );
   }
+  void _shareApp() {
+    try {
+      const String appName = "صحيح الأذكار";
+      const String appLink = "https://play.google.com/store/apps/details?id=com.samy.azkar2&hl=en-US";
+      const String shareMessage = "$appName\n\n$appLink";
+
+      Share.share(shareMessage).then((_) {
+        print("Share completed successfully");
+      }).catchError((error) {
+        print("Share error: $error");
+      });
+    } catch (e) {
+      print("Exception during share: $e");
+    }
+  }
+
 }
